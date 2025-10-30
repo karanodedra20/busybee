@@ -1,0 +1,26 @@
+{
+  "name": "@busybee/busybee-be-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@busybee/busybee-be"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/busybee-be-e2e/jest.config.ts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "@busybee/busybee-be:build",
+          "@busybee/busybee-be:serve"
+        ]
+      }
+    }
+  }
+}
