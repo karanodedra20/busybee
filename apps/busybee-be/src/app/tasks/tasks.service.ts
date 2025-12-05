@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateTaskInput } from './dto/create-task.input';
 import { UpdateTaskInput } from './dto/update-task.input';
 import { PrismaService } from '../prisma/prisma.service';
+import { Task } from '../../generated/prisma/client';
 
 @Injectable()
 export class TasksService {
@@ -18,6 +19,17 @@ export class TasksService {
   findOne(id: string) {
     return this.prisma.task.findUnique({
       where: { id },
+    });
+  }
+
+  async searchByTitle(title: string): Promise<Task[]> {
+    return this.prisma.task.findMany({
+      where: {
+        title: {
+          contains: title,
+          mode: 'insensitive',
+        },
+      },
     });
   }
 

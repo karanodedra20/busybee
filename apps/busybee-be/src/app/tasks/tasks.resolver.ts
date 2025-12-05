@@ -23,6 +23,11 @@ export class TasksResolver {
     return this.tasksService.findOne(id);
   }
 
+  @Query(() => [Task], { name: 'searchTasksByTitle' })
+  searchTasksByTitle(@Args('title', { type: () => String }) title: string) {
+    return this.tasksService.searchByTitle(title);
+  }
+
   @Mutation(() => Task)
   updateTask(@Args('updateTaskInput') updateTaskInput: UpdateTaskInput) {
     return this.tasksService.update(updateTaskInput.id, updateTaskInput);
