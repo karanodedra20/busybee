@@ -11,13 +11,16 @@ import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
+import { ProjectFormModalComponent } from '../project-form-modal/project-form-modal.component';
 import { TaskService } from '../../services/task.service';
+import { ProjectService } from '../../services/project.service';
 import { ToastService } from '../../services/toast.service';
 import {
   Task,
   Priority,
   CreateTaskInput,
   UpdateTaskInput,
+  Project,
 } from '../../models/task.model';
 
 type FilterType = 'all' | 'active' | 'completed';
@@ -29,19 +32,24 @@ type FilterType = 'all' | 'active' | 'completed';
     FormsModule,
     TaskCardComponent,
     TaskFormModalComponent,
+    ProjectFormModalComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })
 export class TaskListComponent implements OnInit {
   tasks = signal<Task[]>([]);
+  projects = signal<Project[]>([]);
   loading = signal(true);
   error = signal<string | null>(null);
   searchQuery = signal('');
   filterType = signal<FilterType>('all');
   priorityFilter = signal<Priority | 'all'>('all');
+  projectFilter = signal<string | 'all'>('all');
+  dateFilter = signal<'all' | 'today' | 'upcoming'>('all');
 
   isModalOpen = signal(false);
+  isProjectModalOpen = signal(false);
   editingTask = signal<Task | null>(null);
   defaultProjectId = signal('default-project');
 
@@ -109,15 +117,65 @@ export class TaskListComponent implements OnInit {
       result = result.filter((task) => task.priority === priority);
     }
 
+    // Apply project filter
+    const project = this.projectFilter();
+    if (project !== 'all') {
+      result = result.filter((task) => task.projectId === project);
+    }
+
+    // Apply date filter
+    const dateFilterValue = this.dateFilter();
+    if (dateFilterValue !== 'all') {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      if (dateFilterValue === 'today') {
+        // Tasks due today
+        result = result.filter((task) => {
+          if (!task.dueDate) return false;
+          const dueDate = new Date(task.dueDate);
+          dueDate.setHours(0, 0, 0, 0);
+          return dueDate.getTime() === today.getTime();
+        });
+      } else if (dateFilterValue === 'upcoming') {
+        // Tasks due in the future (after today)
+        result = result.filter((task) => {
+          if (!task.dueDate) return false;
+          const dueDate = new Date(task.dueDate);
+          dueDate.setHours(0, 0, 0, 0);
+          return dueDate.getTime() >= tomorrow.getTime();
+        });
+      }
+    }
+
     return result;
   });
 
   taskStats = computed(() => {
     const allTasks = this.tasks();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     return {
       total: allTasks.length,
       active: allTasks.filter((t) => !t.completed).length,
       completed: allTasks.filter((t) => t.completed).length,
+      today: allTasks.filter((t) => {
+        if (!t.dueDate || t.completed) return false;
+        const dueDate = new Date(t.dueDate);
+        dueDate.setHours(0, 0, 0, 0);
+        return dueDate.getTime() === today.getTime();
+      }).length,
+      upcoming: allTasks.filter((t) => {
+        if (!t.dueDate || t.completed) return false;
+        const dueDate = new Date(t.dueDate);
+        dueDate.setHours(0, 0, 0, 0);
+        return dueDate.getTime() >= tomorrow.getTime();
+      }).length,
       highPriority: allTasks.filter(
         (t) => !t.completed && t.priority === Priority.HIGH
       ).length,
@@ -127,10 +185,24 @@ export class TaskListComponent implements OnInit {
   readonly Priority = Priority;
 
   private taskService = inject(TaskService);
+  private projectService = inject(ProjectService);
   private toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.loadTasks();
+    this.loadProjects();
+  }
+
+  loadProjects(): void {
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.projects.set(projects);
+      },
+      error: (err) => {
+        console.error('Error loading projects:', err);
+        this.toastService.error('Failed to load projects');
+      },
+    });
   }
 
   loadTasks(): void {
@@ -252,6 +324,21 @@ export class TaskListComponent implements OnInit {
     this.priorityFilter.set(priority);
   }
 
+  setProjectFilter(projectId: string | 'all'): void {
+    this.projectFilter.set(projectId);
+  }
+
+  setDateFilter(dateFilter: 'all' | 'today' | 'upcoming'): void {
+    this.dateFilter.set(dateFilter);
+  }
+
+  resetAllFilters(): void {
+    this.filterType.set('all');
+    this.priorityFilter.set('all');
+    this.projectFilter.set('all');
+    this.dateFilter.set('all');
+  }
+
   trackByTaskId(index: number, task: Task): string {
     return task.id;
   }
@@ -266,5 +353,18 @@ export class TaskListComponent implements OnInit {
 
   closeSidebar(): void {
     this.isSidebarOpen.set(false);
+  }
+
+  openProjectModal(): void {
+    this.isProjectModalOpen.set(true);
+  }
+
+  onProjectModalClosed(): void {
+    this.isProjectModalOpen.set(false);
+  }
+
+  onProjectCreated(): void {
+    this.loadProjects();
+    this.toastService.success('Project created successfully');
   }
 }

@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TasksModule } from './tasks/tasks.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TasksModule } from './tasks/tasks.module';
       autoSchemaFile: join(process.cwd(), 'apps/busybee-be/dist/schema.gql'),
     }),
     TasksModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

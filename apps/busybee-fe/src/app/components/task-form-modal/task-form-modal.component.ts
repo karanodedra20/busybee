@@ -1,7 +1,28 @@
-import { Component, input, output, effect, signal, inject } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  effect,
+  signal,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
-import { Task, Priority, CreateTaskInput, UpdateTaskInput } from '../../models/task.model';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  FormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  Task,
+  Priority,
+  CreateTaskInput,
+  UpdateTaskInput,
+  Project,
+} from '../../models/task.model';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-task-form-modal',
@@ -9,22 +30,24 @@ import { Task, Priority, CreateTaskInput, UpdateTaskInput } from '../../models/t
   templateUrl: './task-form-modal.component.html',
   styleUrl: './task-form-modal.component.scss',
 })
-export class TaskFormModalComponent {
+export class TaskFormModalComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private projectService = inject(ProjectService);
 
   isOpen = input.required<boolean>();
   task = input<Task | null>(null);
-  projectId = input.required<string>();
+  projectId = input<string>('');
 
   closed = output<void>();
   taskSubmitted = output<CreateTaskInput | UpdateTaskInput>();
 
-  form!: FormGroup;
+  form: FormGroup;
   readonly priorities = Object.values(Priority);
   tagInput = signal('');
+  projects = signal<Project[]>([]);
 
   constructor() {
-    this.initializeForm();
+    this.form = this.initializeForm();
 
     effect(() => {
       const currentTask = this.task();
@@ -33,7 +56,10 @@ export class TaskFormModalComponent {
           title: currentTask.title,
           description: currentTask.description || '',
           priority: currentTask.priority,
-          dueDate: currentTask.dueDate ? this.formatDateForInput(new Date(currentTask.dueDate)) : '',
+          dueDate: currentTask.dueDate
+            ? this.formatDateForInput(new Date(currentTask.dueDate))
+            : '',
+          projectId: currentTask.projectId,
         });
         this.form.setControl('tags', this.fb.control(currentTask.tags));
       } else {
@@ -42,12 +68,28 @@ export class TaskFormModalComponent {
     });
   }
 
-  private initializeForm(): void {
-    this.form = this.fb.group({
+  ngOnInit(): void {
+    this.loadProjects();
+  }
+
+  loadProjects(): void {
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.projects.set(projects);
+      },
+      error: (err) => {
+        console.error('Error loading projects:', err);
+      },
+    });
+  }
+
+  private initializeForm(): FormGroup {
+    return this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(200)]],
       description: ['', Validators.maxLength(1000)],
       priority: [Priority.MEDIUM, Validators.required],
       dueDate: [''],
+      projectId: [this.projectId(), Validators.required],
       tags: this.fb.control<string[]>([]),
     });
   }
@@ -99,19 +141,20 @@ export class TaskFormModalComponent {
         priority: formValue.priority,
         dueDate: formValue.dueDate ? new Date(formValue.dueDate) : undefined,
         tags: formValue.tags || [],
+        projectId: formValue.projectId,
       };
 
       if (this.isEditMode) {
-        const updateData: UpdateTaskInput = {
-          id: this.task()!.id,
-          ...taskData,
-        };
-        this.taskSubmitted.emit(updateData);
+        const currentTask = this.task();
+        if (currentTask) {
+          const updateData: UpdateTaskInput = {
+            id: currentTask.id,
+            ...taskData,
+          };
+          this.taskSubmitted.emit(updateData);
+        }
       } else {
-        const createData: CreateTaskInput = {
-          ...taskData,
-          projectId: this.projectId(),
-        };
+        const createData: CreateTaskInput = taskData;
         this.taskSubmitted.emit(createData);
       }
 
@@ -132,6 +175,7 @@ export class TaskFormModalComponent {
       description: '',
       priority: Priority.MEDIUM,
       dueDate: '',
+      projectId: this.projectId(),
       tags: [],
     });
     this.tagInput.set('');

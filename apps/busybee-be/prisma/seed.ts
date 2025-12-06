@@ -5,28 +5,68 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // Create a default project
-  const defaultProject = await prisma.project.upsert({
+  // Create projects
+  const personalProject = await prisma.project.upsert({
     where: { id: 'default-project' },
-    update: {},
+    update: {
+      name: 'Personal',
+      color: '#3B82F6',
+      icon: '#',
+    },
     create: {
       id: 'default-project',
-      name: 'My Tasks',
+      name: 'Personal',
       color: '#3B82F6', // Blue color
-      icon: '📋',
+      icon: '#',
     },
   });
 
-  console.log('✅ Created default project:', defaultProject);
+  const workProject = await prisma.project.upsert({
+    where: { id: 'work-project' },
+    update: {
+      name: 'Work',
+      color: '#EF4444',
+      icon: '#',
+    },
+    create: {
+      id: 'work-project',
+      name: 'Work',
+      color: '#EF4444', // Red color
+      icon: '#',
+    },
+  });
+
+  const shoppingProject = await prisma.project.upsert({
+    where: { id: 'shopping-project' },
+    update: {
+      name: 'Shopping',
+      color: '#10B981',
+      icon: '#',
+    },
+    create: {
+      id: 'shopping-project',
+      name: 'Shopping',
+      color: '#10B981', // Green color
+      icon: '#',
+    },
+  });
+
+  console.log(
+    '✅ Created projects:',
+    personalProject.name,
+    workProject.name,
+    shoppingProject.name
+  );
 
   // Create some sample tasks
   const sampleTasks = [
     {
       title: 'Welcome to BusyBee!',
-      description: 'This is a sample task to help you get started. Feel free to edit or delete it.',
+      description:
+        'This is a sample task to help you get started. Feel free to edit or delete it.',
       priority: Priority.MEDIUM,
       tags: ['welcome', 'getting-started'],
-      projectId: defaultProject.id,
+      projectId: personalProject.id,
     },
     {
       title: 'Try creating a new task',
@@ -34,7 +74,7 @@ async function main() {
       priority: Priority.LOW,
       dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
       tags: ['tutorial'],
-      projectId: defaultProject.id,
+      projectId: personalProject.id,
     },
     {
       title: 'High priority task example',
@@ -42,7 +82,7 @@ async function main() {
       priority: Priority.HIGH,
       dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
       tags: ['important', 'example'],
-      projectId: defaultProject.id,
+      projectId: workProject.id,
     },
   ];
 

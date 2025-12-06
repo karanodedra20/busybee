@@ -1,0 +1,117 @@
+<dialog [class.modal-open]="isOpen()" class="modal">
+  <div class="modal-box w-11/12 max-w-md p-0 overflow-hidden">
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between px-6 py-4 border-b border-base-300"
+    >
+      <h3 class="text-lg font-semibold text-base-content">
+        Create New Project
+      </h3>
+      <button
+        class="btn btn-ghost btn-sm btn-circle"
+        (click)="close()"
+        type="button"
+      >
+        <svg
+          class="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M18 6L6 18M6 6l12 12"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Form Content -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="px-6 py-5">
+      <!-- Project Name -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium text-base-content mb-2">
+          Project Name <span class="text-error">*</span>
+        </label>
+        <input
+          type="text"
+          placeholder="e.g., Work, Personal, Shopping"
+          class="input input-bordered w-full"
+          [class.input-error]="isFieldInvalid('name')"
+          formControlName="name"
+          autocomplete="off"
+        />
+        @if (isFieldInvalid('name')) {
+        <p class="text-xs text-error mt-1.5">{{ getFieldError('name') }}</p>
+        }
+      </div>
+
+      <!-- Color Selection -->
+      <div class="mb-5">
+        <label class="block text-sm font-medium text-base-content mb-2">
+          Color <span class="text-error">*</span>
+        </label>
+        <div class="grid grid-cols-8 gap-2">
+          @for (colorOption of colorOptions; track colorOption.value) {
+          <button
+            type="button"
+            class="w-10 h-10 rounded-lg border-2 transition-all"
+            [style.background-color]="colorOption.value"
+            [class.border-base-content]="
+              form.get('color')?.value === colorOption.value
+            "
+            [class.border-base-300]="
+              form.get('color')?.value !== colorOption.value
+            "
+            [class.scale-110]="form.get('color')?.value === colorOption.value"
+            (click)="form.patchValue({ color: colorOption.value })"
+            [title]="colorOption.name"
+          ></button>
+          }
+        </div>
+      </div>
+
+      <!-- Icon Selection -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-base-content mb-2">
+          Icon
+        </label>
+        <div class="grid grid-cols-10 gap-2">
+          @for (iconOption of iconOptions; track iconOption) {
+          <button
+            type="button"
+            class="w-10 h-10 text-2xl rounded-lg border-2 transition-all hover:scale-110"
+            [class.border-base-content]="form.get('icon')?.value === iconOption"
+            [class.border-base-300]="form.get('icon')?.value !== iconOption"
+            [class.bg-base-200]="form.get('icon')?.value === iconOption"
+            (click)="form.patchValue({ icon: iconOption })"
+          >
+            {{ iconOption }}
+          </button>
+          }
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-end gap-3 pt-4 border-t border-base-300">
+        <button type="button" class="btn btn-ghost" (click)="close()">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-error"
+          [disabled]="form.invalid || isSubmitting()"
+        >
+          @if (isSubmitting()) {
+          <span class="loading loading-spinner loading-sm"></span>
+          Creating... } @else { Create Project }
+        </button>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button (click)="close()">close</button>
+  </form>
+</dialog>
