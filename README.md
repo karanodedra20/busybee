@@ -15,7 +15,6 @@ Busybee is a comprehensive task management system that helps you organize your w
 - **State Management**: Angular Signals
 - **API Communication**: Apollo Client (GraphQL)
 - **Calendar**: Cally Web Component
-- **Server-Side Rendering**: Angular SSR
 
 ### Backend (busybee-be)
 
@@ -31,6 +30,17 @@ Busybee is a comprehensive task management system that helps you organize your w
 - **Language**: TypeScript
 - **Testing**: Jest, Vitest & Playwright
 - **Linting**: ESLint
+
+## 🌐 Live Deployment
+
+- **Frontend**: [Netlify](https://busybee-tasks.netlify.app)
+- **Backend API**: https://busybee-g318.onrender.com/graphql
+
+The application is deployed using:
+
+- **Frontend**: Netlify (static build)
+- **Backend**: Render (Web Service)
+- **Database**: Neon (Serverless PostgreSQL)
 
 ## 🏃 Getting Started
 
@@ -207,6 +217,50 @@ DATABASE_URL="postgresql://user:password@host:port/database"
 PORT=3000
 NODE_ENV=development
 ```
+
+### Frontend (environment files)
+
+**Development** (`apps/busybee-fe/src/environments/environment.ts`):
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3000/graphql',
+};
+```
+
+**Production** (`apps/busybee-fe/src/environments/environment.prod.ts`):
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://busybee-g318.onrender.com/graphql',
+};
+```
+
+## 🚀 Deployment
+
+### Backend (Render)
+
+1. Create a new Web Service on [Render](https://render.com)
+2. Connect your GitHub repository
+3. Configure the service:
+   - **Build Command**: `npm install && npx nx build busybee-be`
+   - **Start Command**: `node apps/busybee-be/dist/main.js`
+   - **Environment**: Node
+4. Add environment variable: `DATABASE_URL` (your Neon PostgreSQL connection string)
+5. Deploy!
+
+### Frontend (Netlify)
+
+1. Create a new site on [Netlify](https://netlify.com)
+2. Connect your GitHub repository
+3. Configure build settings:
+   - **Build Command**: `nx build busybee-fe --configuration=production`
+   - **Publish Directory**: `dist/apps/busybee-fe/browser`
+4. Deploy!
+
+The frontend automatically uses the production API URL when built with the production configuration.
 
 ## 🎨 Frontend Architecture
 
