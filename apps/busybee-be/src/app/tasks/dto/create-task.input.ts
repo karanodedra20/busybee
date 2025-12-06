@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { Priority } from '../../../generated/prisma';
+import { Priority } from '../../../generated/prisma/client';
 
 @InputType()
 export class CreateTaskInput {
