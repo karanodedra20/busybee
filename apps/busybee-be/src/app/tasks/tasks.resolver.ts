@@ -34,7 +34,7 @@ export class TasksResolver {
   }
 
   @Mutation(() => Task)
-  removeTask(@Args('id', { type: () => Int }) id: number) {
+  removeTask(@Args('id', { type: () => String }) id: string) {
     return this.tasksService.remove(id);
   }
 }

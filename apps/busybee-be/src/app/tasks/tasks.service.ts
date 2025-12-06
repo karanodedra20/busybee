@@ -9,11 +9,19 @@ export class TasksService {
   constructor(private prisma: PrismaService) {}
 
   create(createTaskInput: CreateTaskInput) {
-    return 'This action adds a new task';
+    return this.prisma.task.create({
+      data: createTaskInput,
+    });
   }
 
   findAll() {
-    return this.prisma.task.findMany();
+    return this.prisma.task.findMany({
+      orderBy: [
+        { completed: 'asc' },
+        { dueDate: 'asc' },
+        { priority: 'desc' },
+      ],
+    });
   }
 
   findOne(id: string) {
@@ -33,11 +41,17 @@ export class TasksService {
     });
   }
 
-  update(id: number, updateTaskInput: UpdateTaskInput) {
-    return `This action updates a #${id} task`;
+  update(id: string, updateTaskInput: UpdateTaskInput) {
+    const { id: _, ...data } = updateTaskInput;
+    return this.prisma.task.update({
+      where: { id },
+      data,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  remove(id: string) {
+    return this.prisma.task.delete({
+      where: { id },
+    });
   }
 }

@@ -1,0 +1,443 @@
+<div class="flex min-h-screen bg-base-100">
+  <!-- Sidebar -->
+  <aside
+    class="w-64 bg-base-100 border-r border-base-content/20 flex flex-col fixed top-0 left-0 bottom-0 overflow-y-auto shadow-sm"
+  >
+    <!-- Logo -->
+    <div class="px-6 py-8">
+      <h1 class="text-xl font-semibold text-base-content">Task Manager</h1>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 px-4 pb-6">
+      <!-- Filters Section -->
+      <div class="mb-8">
+        <h2 class="text-sm font-semibold text-base-content/40 mb-3 px-0.5">
+          Filters
+        </h2>
+        <ul class="space-y-0.5">
+          <li>
+            <button
+              class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+              [class.bg-base-200]="
+                filterType() === 'all' && priorityFilter() === 'all'
+              "
+              [class.font-medium]="
+                filterType() === 'all' && priorityFilter() === 'all'
+              "
+              (click)="setFilter('all'); setPriorityFilter('all')"
+            >
+              <div class="flex items-center gap-3">
+                <svg
+                  class="w-5 h-5 text-base-content/60"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z" />
+                </svg>
+                <span>All Tasks</span>
+              </div>
+              <span class="text-xs text-base-content/50 font-medium">{{
+                taskStats().total
+              }}</span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+              [class.bg-base-200]="filterType() === 'active'"
+              [class.font-medium]="filterType() === 'active'"
+              (click)="setFilter('active')"
+            >
+              <div class="flex items-center gap-3">
+                <svg
+                  class="w-5 h-5 text-success"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2z"
+                  />
+                </svg>
+                <span>Today</span>
+              </div>
+              <span class="text-xs text-base-content/50 font-medium">{{
+                taskStats().active
+              }}</span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+              [class.bg-base-200]="priorityFilter() === Priority.HIGH"
+              [class.font-medium]="priorityFilter() === Priority.HIGH"
+              (click)="setFilter('all'); setPriorityFilter(Priority.HIGH)"
+            >
+              <div class="flex items-center gap-3">
+                <svg
+                  class="w-5 h-5 text-warning"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10z"
+                  />
+                </svg>
+                <span>Upcoming</span>
+              </div>
+              <span class="text-xs text-base-content/50 font-medium">{{
+                taskStats().highPriority
+              }}</span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+              [class.bg-base-200]="filterType() === 'completed'"
+              [class.font-medium]="filterType() === 'completed'"
+              (click)="setFilter('completed')"
+            >
+              <div class="flex items-center gap-3">
+                <svg
+                  class="w-5 h-5 text-base-content/60"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+                  />
+                </svg>
+                <span>Completed</span>
+              </div>
+              <span class="text-xs text-base-content/50 font-medium">{{
+                taskStats().completed
+              }}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Projects Section -->
+      <div>
+        <div class="flex items-center justify-between mb-3 px-0.5">
+          <h2 class="text-sm font-semibold text-base-content/40">Projects</h2>
+          <button
+            class="btn btn-ghost btn-xs btn-square text-base-content/50 hover:text-base-content"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+        <ul class="space-y-0.5">
+          <li>
+            <button
+              class="w-full flex items-center gap-3 px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+              [class.bg-base-200]="
+                filterType() === 'all' && priorityFilter() === 'all'
+              "
+              [class.font-medium]="
+                filterType() === 'all' && priorityFilter() === 'all'
+              "
+              (click)="setFilter('all'); setPriorityFilter('all')"
+            >
+              <span class="text-lg text-info font-bold">#</span>
+              <span>Personal</span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="w-full flex items-center gap-3 px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            >
+              <span class="text-lg text-error font-bold">#</span>
+              <span>Work</span>
+            </button>
+          </li>
+          <li>
+            <button
+              class="w-full flex items-center gap-3 px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            >
+              <span class="text-lg text-success font-bold">#</span>
+              <span>Shopping</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 flex flex-col">
+    <!-- Header -->
+    <header class="bg-base-100 border-b border-base-300/50 sticky top-0 z-10">
+      <div class="flex items-center justify-between gap-6 px-12 py-5 max-w-5xl">
+        <h2 class="text-2xl font-bold text-base-content">
+          @if (filterType() === 'all' && priorityFilter() === 'all') { All Tasks
+          } @else if (filterType() === 'active') { Today } @else if
+          (filterType() === 'completed') { Completed } @else if
+          (priorityFilter() !== 'all') { Upcoming }
+        </h2>
+
+        <div class="flex items-center gap-3">
+          <!-- Search -->
+          <label
+            class="input input-sm input-bordered flex items-center gap-2 w-60 bg-base-100 border-base-content/20"
+          >
+            <svg
+              class="w-4 h-4 text-base-content/40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" stroke-linecap="round" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              class="grow text-sm"
+              [ngModel]="searchQuery()"
+              (ngModelChange)="onSearchChange($event)"
+            />
+          </label>
+
+          <!-- Theme Toggle -->
+          <button
+            class="btn btn-sm btn-ghost btn-circle"
+            (click)="toggleTheme()"
+            [title]="
+              isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'
+            "
+          >
+            @if (isDarkMode()) {
+            <!-- Sun icon for light mode -->
+            <svg
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <path
+                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                stroke-linecap="round"
+              />
+            </svg>
+            } @else {
+            <!-- Moon icon for dark mode -->
+            <svg
+              class="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            }
+          </button>
+
+          <!-- Add Task Button -->
+          <button
+            class="btn btn-sm btn-neutral gap-1.5 normal-case font-medium"
+            (click)="onCreateTask()"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+            </svg>
+            Add Task
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Error Alert -->
+    @if (error()) {
+    <div class="alert alert-error mx-12 mt-6 max-w-5xl">
+      <svg
+        class="w-6 h-6"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 8v4M12 16h.01" stroke-linecap="round" />
+      </svg>
+      <span>{{ error() }}</span>
+      <button class="btn btn-ghost btn-sm btn-circle" (click)="error.set(null)">
+        <svg
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    }
+
+    <!-- Task List Container -->
+    <div class="flex-1 px-12 py-6 max-w-5xl">
+      @if (loading()) {
+      <!-- Loading State -->
+      <div class="flex flex-col items-center justify-center py-20">
+        <span class="loading loading-spinner loading-lg text-error"></span>
+        <p class="text-base-content/50 text-sm mt-4">Loading tasks...</p>
+      </div>
+      } @else if (filteredTasks().length === 0) {
+      <!-- Empty State -->
+      <div
+        class="flex flex-col items-center justify-center py-20 text-center px-4"
+      >
+        @if (searchQuery() || filterType() !== 'all' || priorityFilter() !==
+        'all') {
+        <svg
+          class="w-20 h-20 text-base-content/15 mb-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" stroke-linecap="round" />
+        </svg>
+        <h3 class="text-lg font-semibold text-base-content mb-1.5">
+          No tasks found
+        </h3>
+        <p class="text-sm text-base-content/50 mb-5">
+          Try adjusting your filters or search query
+        </p>
+        <button
+          class="btn btn-ghost btn-sm normal-case"
+          (click)="
+            searchQuery.set(''); setFilter('all'); setPriorityFilter('all')
+          "
+        >
+          Clear filters
+        </button>
+        } @else {
+        <svg
+          class="w-20 h-20 text-base-content/15 mb-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <path d="M9 11h6M12 8v6" stroke-linecap="round" />
+        </svg>
+        <h3 class="text-lg font-semibold text-base-content mb-1.5">
+          No tasks yet
+        </h3>
+        <p class="text-sm text-base-content/50 mb-5">
+          Get organized by creating your first task
+        </p>
+        <button
+          class="btn btn-sm btn-neutral gap-1.5 normal-case"
+          (click)="onCreateTask()"
+        >
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+          </svg>
+          Add task
+        </button>
+        }
+      </div>
+      } @else {
+      <!-- Task List -->
+      <ul class="space-y-2 mb-8">
+        @for (task of filteredTasks(); track trackByTaskId($index, task)) {
+        <app-task-card
+          [task]="task"
+          (taskToggled)="onTaskToggled($event)"
+          (taskEdited)="onTaskEdited($event)"
+          (taskDeleted)="onTaskDeleted($event)"
+        />
+        }
+      </ul>
+      }
+    </div>
+  </main>
+</div>
+
+<!-- Task Form Modal -->
+<app-task-form-modal
+  [isOpen]="isModalOpen()"
+  [task]="editingTask()"
+  [projectId]="defaultProjectId()"
+  (closed)="onModalClosed()"
+  (taskSubmitted)="onTaskSubmitted($event)"
+/>
+
+<!-- Delete Confirmation Modal -->
+@if (isDeleteModalOpen()) {
+<div class="modal modal-open">
+  <div class="modal-box bg-base-100 border border-base-content/10">
+    <h3 class="font-bold text-lg text-error flex items-center gap-2">
+      <svg
+        class="w-6 h-6"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      Delete Task
+    </h3>
+    <p class="py-4 text-base-content/80">
+      Are you sure you want to delete "<span
+        class="font-semibold text-base-content"
+        >{{ taskToDelete()?.title }}</span
+      >"?
+      <br />
+      <span class="text-sm text-base-content/60 mt-2 block"
+        >This action cannot be undone.</span
+      >
+    </p>
+    <div class="modal-action">
+      <button class="btn btn-ghost" (click)="closeDeleteModal()">Cancel</button>
+      <button class="btn btn-error" (click)="confirmDelete()">
+        Delete Task
+      </button>
+    </div>
+  </div>
+  <button
+    class="modal-backdrop bg-base-300/50 backdrop-blur-sm cursor-default"
+    (click)="closeDeleteModal()"
+  >
+    close
+  </button>
+</div>
+}

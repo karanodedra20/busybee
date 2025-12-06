@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/busybee-be"
+    },
+    {
+      "path": "./apps/busybee-fe-e2e"
     }
   ]
 }
