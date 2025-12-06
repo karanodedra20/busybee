@@ -6,6 +6,7 @@ import {
   signal,
   inject,
   OnInit,
+  CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -27,6 +28,7 @@ import { ProjectService } from '../../services/project.service';
 @Component({
   selector: 'app-task-form-modal',
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './task-form-modal.component.html',
   styleUrl: './task-form-modal.component.scss',
 })
@@ -179,6 +181,12 @@ export class TaskFormModalComponent implements OnInit {
       tags: [],
     });
     this.tagInput.set('');
+  }
+
+  onDateChange(event: Event): void {
+    const target = event.target as HTMLElement & { value: string };
+    const selectedDate = target.value;
+    this.form.patchValue({ dueDate: selectedDate });
   }
 
   private formatDateForInput(date: Date): string {

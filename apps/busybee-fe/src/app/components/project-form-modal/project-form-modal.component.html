@@ -32,10 +32,14 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="px-6 py-5">
       <!-- Project Name -->
       <div class="mb-5">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="project-name"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Project Name <span class="text-error">*</span>
         </label>
         <input
+          id="project-name"
           type="text"
           placeholder="e.g., Work, Personal, Shopping"
           class="input input-bordered w-full"
@@ -50,9 +54,13 @@
 
       <!-- Color Selection -->
       <div class="mb-5">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="project-color"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Color <span class="text-error">*</span>
         </label>
+        <input id="project-color" type="hidden" formControlName="color" />
         <div class="grid grid-cols-8 gap-2">
           @for (colorOption of colorOptions; track colorOption.value) {
           <button
@@ -75,9 +83,13 @@
 
       <!-- Icon Selection -->
       <div class="mb-6">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="project-icon"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Icon
         </label>
+        <input id="project-icon" type="hidden" formControlName="icon" />
         <div class="grid grid-cols-10 gap-2">
           @for (iconOption of iconOptions; track iconOption) {
           <button

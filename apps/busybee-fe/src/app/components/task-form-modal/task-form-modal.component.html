@@ -30,10 +30,14 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="px-6 py-5">
       <!-- Title -->
       <div class="mb-5">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="title-input"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Task Title <span class="text-error">*</span>
         </label>
         <input
+          id="title-input"
           type="text"
           placeholder="e.g., Review project proposal"
           class="input input-bordered w-full"
@@ -48,10 +52,14 @@
 
       <!-- Description -->
       <div class="mb-5">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="description-textarea"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Description
         </label>
         <textarea
+          id="description-textarea"
           class="textarea textarea-bordered w-full h-20 resize-none"
           [class.textarea-error]="isFieldInvalid('description')"
           placeholder="Add more details about this task..."
@@ -66,10 +74,14 @@
 
       <!-- Project -->
       <div class="mb-5">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="project-select"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Project <span class="text-error">*</span>
         </label>
         <select
+          id="project-select"
           class="select select-bordered w-full"
           formControlName="projectId"
         >
@@ -85,22 +97,68 @@
       <div class="grid grid-cols-2 gap-4 mb-5">
         <!-- Due Date -->
         <div>
-          <label class="block text-sm font-medium text-base-content mb-2">
+          <label
+            for="cally-btn"
+            class="block text-sm font-medium text-base-content mb-2"
+          >
             Due Date
           </label>
-          <input
-            type="date"
-            class="input input-bordered w-full"
-            formControlName="dueDate"
-          />
+          <button
+            popovertarget="cally-popover"
+            class="input input-bordered"
+            id="cally-btn"
+            style="anchor-name: --cally1"
+            type="button"
+          >
+            {{ form.get('dueDate')?.value || 'Pick a date' }}
+          </button>
+          <div
+            popover
+            id="cally-popover"
+            class="dropdown bg-base-100 rounded-box shadow-lg border border-base-300 m-0"
+            style="position-anchor: --cally1"
+          >
+            <calendar-date
+              class="cally"
+              [value]="form.get('dueDate')?.value"
+              (change)="onDateChange($event)"
+            >
+              <svg
+                aria-label="Previous"
+                class="fill-current size-4"
+                slot="previous"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                ></path>
+              </svg>
+              <svg
+                aria-label="Next"
+                class="fill-current size-4"
+                slot="next"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                <path fill="currentColor" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+              </svg>
+              <calendar-month></calendar-month>
+            </calendar-date>
+          </div>
         </div>
 
         <!-- Priority -->
         <div>
-          <label class="block text-sm font-medium text-base-content mb-2">
+          <label
+            for="priority-select"
+            class="block text-sm font-medium text-base-content mb-2"
+          >
             Priority <span class="text-error">*</span>
           </label>
           <select
+            id="priority-select"
             class="select select-bordered w-full"
             formControlName="priority"
           >
@@ -121,11 +179,15 @@
 
       <!-- Tags -->
       <div class="mb-6">
-        <label class="block text-sm font-medium text-base-content mb-2">
+        <label
+          for="tag-input"
+          class="block text-sm font-medium text-base-content mb-2"
+        >
           Tags
         </label>
         <div class="flex gap-2 mb-3">
           <input
+            id="tag-input"
             type="text"
             placeholder="Add a tag..."
             class="input input-bordered input-sm flex-1"
