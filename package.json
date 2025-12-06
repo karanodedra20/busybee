@@ -77,7 +77,7 @@
     "@angular/ssr": "~20.3.0",
     "@apollo/client": "^4.0.9",
     "@apollo/server": "^5.1.0",
-    "@as-integrations/express5": "^1.1.2",
+    "@as-integrations/express4": "^1.1.2",
     "@nestjs/apollo": "^13.2.1",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
