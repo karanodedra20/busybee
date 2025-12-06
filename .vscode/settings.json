@@ -1,0 +1,3 @@
+{
+  "tailwindCSS.experimental.configFile": "apps/busybee-fe/src/styles.scss"
+}
