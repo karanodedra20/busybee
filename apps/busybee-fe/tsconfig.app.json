@@ -2,13 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": ["node"],
-    "composite": false,
-    "emitDeclarationOnly": false,
-    "declaration": true,
-    "moduleResolution": "bundler",
-    "module": "esnext",
-    "lib": ["es2022", "DOM"]
+    "types": ["node"]
   },
   "include": ["src/**/*.ts"],
   "exclude": [

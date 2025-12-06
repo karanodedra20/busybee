@@ -80,6 +80,22 @@
       "linter": "eslint",
       "style": "scss",
       "unitTestRunner": "vitest"
+    },
+    "@schematics/angular:component": {
+      "style": "scss",
+      "type": "component"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:pipe": {
+      "type": "pipe"
+    },
+    "@schematics/angular:guard": {
+      "type": "guard"
     }
   }
 }
