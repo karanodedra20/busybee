@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { Observable, map } from 'rxjs';
 import { Task, CreateTaskInput, UpdateTaskInput } from '../models/task.model';
@@ -100,7 +100,7 @@ const DELETE_TASK = gql`
   providedIn: 'root',
 })
 export class TaskService {
-  constructor(private apollo: Apollo) {}
+  private apollo = inject(Apollo);
 
   getTasks(): Observable<Task[]> {
     return this.apollo
@@ -116,7 +116,9 @@ export class TaskService {
         query: GET_TASK,
         variables: { id },
       })
-      .valueChanges.pipe(map((result) => result.data?.task as Task | undefined));
+      .valueChanges.pipe(
+        map((result) => result.data?.task as Task | undefined)
+      );
   }
 
   searchTasksByTitle(title: string): Observable<Task[]> {
@@ -125,7 +127,9 @@ export class TaskService {
         query: SEARCH_TASKS_BY_TITLE,
         variables: { title },
       })
-      .valueChanges.pipe(map((result) => (result.data?.searchTasksByTitle || []) as Task[]));
+      .valueChanges.pipe(
+        map((result) => (result.data?.searchTasksByTitle || []) as Task[])
+      );
   }
 
   createTask(input: CreateTaskInput): Observable<Task> {
