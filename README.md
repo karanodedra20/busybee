@@ -1,109 +1,255 @@
-# Busybee
+# Busybee 🐝
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A modern, full-stack task management application built with Nx monorepo architecture.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## 📋 Overview
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+Busybee is a comprehensive task management system that helps you organize your work with projects, tags, and priorities. Built with cutting-edge technologies for both frontend and backend.
 
-## Generate a library
+## 🚀 Tech Stack
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
-```
+### Frontend (busybee-fe)
 
-## Run tasks
+- **Framework**: Angular 20 with Signals & Standalone Components
+- **Styling**: Tailwind CSS & DaisyUI
+- **State Management**: Angular Signals
+- **API Communication**: Apollo Client (GraphQL)
+- **Calendar**: Cally Web Component
+- **Server-Side Rendering**: Angular SSR
 
-To build the library use:
+### Backend (busybee-be)
 
-```sh
-npx nx build pkg1
-```
+- **Framework**: NestJS
+- **API**: GraphQL with Apollo Server v4
+- **Database ORM**: Prisma
+- **Database**: PostgreSQL (Neon serverless)
+- **Runtime**: Node.js
 
-To run any task with Nx use:
+### Development Tools
 
-```sh
-npx nx <target> <project-name>
-```
+- **Monorepo**: Nx
+- **Language**: TypeScript
+- **Testing**: Jest, Vitest & Playwright
+- **Linting**: ESLint
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## 🏃 Getting Started
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Prerequisites
 
-## Versioning and releasing
+- Node.js (v18 or higher)
+- npm or yarn
+- PostgreSQL database (or Neon account)
 
-To version and release the library use
-
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
+### Installation
 
 ```sh
-npx nx sync
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp apps/busybee-be/.env.example apps/busybee-be/.env
+# Configure your DATABASE_URL in .env
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+### Database Setup
 
 ```sh
-npx nx sync:check
+# Run Prisma migrations
+cd apps/busybee-be
+npx prisma migrate dev
+
+# Seed the database (optional)
+npx prisma db seed
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+## 🚀 Running the Applications
 
-## Set up CI!
+### Development Mode
 
-### Step 1
-
-To connect to Nx Cloud, run the following command:
+Run both frontend and backend concurrently:
 
 ```sh
-npx nx connect
+# Start backend (GraphQL API)
+npx nx serve busybee-be
+
+# Start frontend (Angular app)
+npx nx serve busybee-fe
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+The applications will be available at:
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- Frontend: http://localhost:4200
+- Backend API: http://localhost:3000/api
+- GraphQL Playground: http://localhost:3000/graphql
 
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
+### Build for Production
 
 ```sh
-npx nx g ci-workflow
+# Build backend
+npx nx build busybee-be
+
+# Build frontend
+npx nx build busybee-fe
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 📁 Project Structure
 
-## Install Nx Console
+```
+busybee/
+├── apps/
+│   ├── busybee-fe/          # Angular frontend application
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── components/
+│   │   │   │   ├── services/
+│   │   │   │   └── models/
+│   │   │   └── styles.scss
+│   │   └── project.json
+│   │
+│   ├── busybee-be/          # NestJS backend application
+│   │   ├── src/
+│   │   │   ├── app/
+│   │   │   │   ├── tasks/
+│   │   │   │   ├── projects/
+│   │   │   │   └── prisma/
+│   │   │   └── main.ts
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma
+│   │   │   └── migrations/
+│   │   └── project.json
+│   │
+│   ├── busybee-fe-e2e/      # Frontend E2E tests
+│   └── busybee-be-e2e/      # Backend E2E tests
+│
+└── packages/                 # Shared libraries (if any)
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+## ✨ Features
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- **Task Management**: Create, update, delete, and organize tasks
+- **Project Organization**: Group tasks into projects with custom colors and icons
+- **Tags System**: Flexible tagging for cross-project organization
+- **Priority Levels**: High, Medium, Low priority classification
+- **Due Dates**: Calendar integration with Cally web component
+- **Search**: Find tasks quickly by title
+- **Filtering**: Filter tasks by project, tags, priority, and completion status
+- **GraphQL API**: Modern, efficient API with type safety
+- **Responsive Design**: Mobile-friendly interface with DaisyUI components
 
-## Useful links
+## 🧪 Testing
 
-Learn more:
+```sh
+# Run unit tests
+npx nx test busybee-fe
+npx nx test busybee-be
 
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# Run E2E tests
+npx nx e2e busybee-fe-e2e
+npx nx e2e busybee-be-e2e
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# Run all tests
+npx nx run-many --target=test
+```
+
+## 📊 Nx Commands
+
+```sh
+# View project graph
+npx nx graph
+
+# Run tasks for affected projects
+npx nx affected --target=build
+
+# Lint all projects
+npx nx run-many --target=lint
+
+# Format code
+npx nx format:write
+```
+
+## 🗄️ Database Management
+
+```sh
+# Open Prisma Studio (database GUI)
+cd apps/busybee-be
+npx prisma studio
+
+# Create new migration
+npx prisma migrate dev --name migration_name
+
+# Reset database
+npx prisma migrate reset
+```
+
+## 🛠️ Development Tools
+
+### Nx Console
+
+Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE.
+
+[Install Nx Console for VS Code &raquo;](https://nx.dev/getting-started/editor-setup)
+
+### Prisma Studio
+
+Visual database editor for managing your data:
+
+```sh
+cd apps/busybee-be
+npx prisma studio
+```
+
+## 📝 Environment Variables
+
+### Backend (.env)
+
+```env
+DATABASE_URL="postgresql://user:password@host:port/database"
+PORT=3000
+NODE_ENV=development
+```
+
+## 🎨 Frontend Architecture
+
+- **Standalone Components**: Using Angular's modern standalone component API
+- **Signals**: Reactive state management with Angular Signals
+- **Apollo Client**: Type-safe GraphQL queries and mutations
+- **Reactive Forms**: FormBuilder with validation
+- **DaisyUI Themes**: Built-in dark/light mode support
+
+## 🔧 Backend Architecture
+
+- **Modular Structure**: NestJS modules for tasks, projects, and tags
+- **GraphQL Schema-First**: Code-first approach with decorators
+- **Prisma ORM**: Type-safe database access
+- **Dependency Injection**: NestJS DI container
+- **Database Migrations**: Version-controlled schema changes
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 📚 Useful Links
+
+### Technologies
+
+- [Angular](https://angular.dev) - Frontend framework
+- [NestJS](https://nestjs.com) - Backend framework
+- [Prisma](https://www.prisma.io) - Database ORM
+- [GraphQL](https://graphql.org) - API query language
+- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS
+- [DaisyUI](https://daisyui.com) - Component library
+- [Nx](https://nx.dev) - Monorepo tools
+
+### Nx Resources
+
+- [Nx Documentation](https://nx.dev)
+- [Nx Console](https://nx.dev/getting-started/editor-setup)
+- [Nx Community Discord](https://go.nx.dev/community)
+
+---
+
+Built with ❤️ using Nx monorepo
