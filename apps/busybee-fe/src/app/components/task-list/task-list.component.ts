@@ -50,7 +50,9 @@ export class TaskListComponent implements OnInit {
 
   isModalOpen = signal(false);
   isProjectModalOpen = signal(false);
+  isDeleteProjectModalOpen = signal(false);
   editingTask = signal<Task | null>(null);
+  projectToDelete = signal<Project | null>(null);
   defaultProjectId = signal('default-project');
 
   // Delete Confirmation State
@@ -366,5 +368,42 @@ export class TaskListComponent implements OnInit {
   onProjectCreated(): void {
     this.loadProjects();
     this.toastService.success('Project created successfully');
+  }
+
+  onDeleteProject(project: Project, event: Event): void {
+    event.stopPropagation();
+    this.projectToDelete.set(project);
+    this.isDeleteProjectModalOpen.set(true);
+  }
+
+  closeDeleteProjectModal(): void {
+    this.isDeleteProjectModalOpen.set(false);
+    this.projectToDelete.set(null);
+  }
+
+  confirmDeleteProject(): void {
+    const project = this.projectToDelete();
+    if (!project) return;
+
+    this.projectService.deleteProject(project.id).subscribe({
+      next: () => {
+        this.projects.update((projects) =>
+          projects.filter((p) => p.id !== project.id)
+        );
+        // Reset project filter if the deleted project was selected
+        if (this.projectFilter() === project.id) {
+          this.projectFilter.set('all');
+        }
+        this.toastService.success('Project deleted successfully');
+        this.closeDeleteProjectModal();
+        // Reload tasks to ensure consistency
+        this.loadTasks();
+      },
+      error: (err) => {
+        console.error('Error deleting project:', err);
+        this.toastService.error('Failed to delete project');
+        this.closeDeleteProjectModal();
+      },
+    });
   }
 }
