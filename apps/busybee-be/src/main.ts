@@ -12,7 +12,12 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:4000'],
+    origin: [
+      'http://localhost:4200',
+      'http://localhost:4000',
+      /\.netlify\.app$/, // Allow all Netlify preview deployments
+      /\.netlify\.live$/, // Allow Netlify domain
+    ],
     credentials: true,
   });
 

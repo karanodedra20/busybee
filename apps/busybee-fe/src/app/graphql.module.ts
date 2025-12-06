@@ -1,10 +1,11 @@
 import { InMemoryCache } from '@apollo/client/core';
 import { HttpLink } from 'apollo-angular/http';
+import { environment } from '../environments/environment';
 
 export function createApollo(httpLink: HttpLink) {
   return {
     link: httpLink.create({
-      uri: 'http://localhost:3000/graphql',
+      uri: environment.apiUrl,
     }),
     cache: new InMemoryCache(),
     defaultOptions: {

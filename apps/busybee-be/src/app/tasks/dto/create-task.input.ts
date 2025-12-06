@@ -9,7 +9,10 @@ export class CreateTaskInput {
   @Field(() => String, { nullable: true, description: 'Task description' })
   description?: string;
 
-  @Field(() => Priority, { defaultValue: Priority.LOW, description: 'Task priority level' })
+  @Field(() => Priority, {
+    defaultValue: Priority.LOW,
+    description: 'Task priority level',
+  })
   priority!: Priority;
 
   @Field(() => Date, { nullable: true, description: 'Task due date' })
