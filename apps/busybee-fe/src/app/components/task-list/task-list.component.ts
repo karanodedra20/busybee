@@ -51,6 +51,9 @@ export class TaskListComponent implements OnInit {
 
   isDarkMode = signal(true); // Default to dark mode
 
+  // Sidebar State
+  isSidebarOpen = signal(false);
+
   private document = inject(DOCUMENT);
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
@@ -255,5 +258,13 @@ export class TaskListComponent implements OnInit {
 
   toggleTheme(): void {
     this.isDarkMode.update((isDark) => !isDark);
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen.update((v) => !v);
+  }
+
+  closeSidebar(): void {
+    this.isSidebarOpen.set(false);
   }
 }
