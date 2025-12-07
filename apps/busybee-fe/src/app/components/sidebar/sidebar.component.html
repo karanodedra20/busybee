@@ -1,0 +1,247 @@
+<!-- Mobile Sidebar Backdrop -->
+@if (isSidebarOpen()) {
+<button
+  class="fixed inset-0 bg-black/50 z-20 lg:hidden cursor-default"
+  (click)="sidebarClosed.emit()"
+  aria-label="Close sidebar"
+></button>
+}
+
+<!-- Sidebar -->
+<aside
+  class="w-64 bg-base-100 border-r border-base-content/20 flex flex-col fixed top-0 left-0 bottom-0 overflow-y-auto shadow-sm z-30 transition-transform duration-300 lg:translate-x-0"
+  [class.-translate-x-full]="!isSidebarOpen()"
+  [class.translate-x-0]="isSidebarOpen()"
+>
+  <!-- Logo -->
+  <div class="px-6 py-8 flex items-center justify-between">
+    <h1 class="text-xl font-semibold text-base-content">Busy Bee</h1>
+    <button
+      class="btn btn-ghost btn-sm btn-square lg:hidden"
+      (click)="sidebarClosed.emit()"
+    >
+      <svg
+        class="w-5 h-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          d="M18 6L6 18M6 6l12 12"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 px-4 pb-6">
+    <!-- Filters Section -->
+    <div class="mb-8">
+      <h2 class="text-sm font-semibold text-base-content/40 mb-3 px-0.5">
+        Filters
+      </h2>
+      <ul class="space-y-0.5">
+        <li>
+          <button
+            class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            [class.bg-base-200]="
+              filterType() === 'all' &&
+              priorityFilter() === 'all' &&
+              dateFilter() === 'all' &&
+              projectFilter() === 'all'
+            "
+            [class.font-medium]="
+              filterType() === 'all' &&
+              priorityFilter() === 'all' &&
+              dateFilter() === 'all' &&
+              projectFilter() === 'all'
+            "
+            (click)="resetFilters.emit()"
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-5 h-5 text-base-content/60"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z" />
+              </svg>
+              <span>All Tasks</span>
+            </div>
+            <span class="text-xs text-base-content/50 font-medium">{{
+              taskStats().total
+            }}</span>
+          </button>
+        </li>
+        <li>
+          <button
+            class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            [class.bg-base-200]="dateFilter() === 'today'"
+            [class.font-medium]="dateFilter() === 'today'"
+            (click)="
+              filterChanged.emit({
+                date: 'today',
+                type: 'active',
+                priority: 'all',
+                project: 'all'
+              })
+            "
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-5 h-5 text-success"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm2 4h10v2H7v-2z"
+                />
+              </svg>
+              <span>Today</span>
+            </div>
+            <span class="text-xs text-base-content/50 font-medium">{{
+              taskStats().today
+            }}</span>
+          </button>
+        </li>
+        <li>
+          <button
+            class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            [class.bg-base-200]="dateFilter() === 'upcoming'"
+            [class.font-medium]="dateFilter() === 'upcoming'"
+            (click)="
+              filterChanged.emit({
+                date: 'upcoming',
+                type: 'active',
+                priority: 'all',
+                project: 'all'
+              })
+            "
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-5 h-5 text-warning"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10z"
+                />
+              </svg>
+              <span>Upcoming</span>
+            </div>
+            <span class="text-xs text-base-content/50 font-medium">{{
+              taskStats().upcoming
+            }}</span>
+          </button>
+        </li>
+        <li>
+          <button
+            class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            [class.bg-base-200]="filterType() === 'completed'"
+            [class.font-medium]="filterType() === 'completed'"
+            (click)="
+              filterChanged.emit({
+                type: 'completed',
+                priority: 'all',
+                date: 'all',
+                project: 'all'
+              })
+            "
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-5 h-5 text-base-content/60"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+                />
+              </svg>
+              <span>Completed</span>
+            </div>
+            <span class="text-xs text-base-content/50 font-medium">{{
+              taskStats().completed
+            }}</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Projects Section -->
+    <div>
+      <div class="flex items-center justify-between mb-3 px-0.5">
+        <h2 class="text-sm font-semibold text-base-content/40">Projects</h2>
+        <button
+          class="btn btn-ghost btn-xs btn-square text-base-content/50 hover:text-base-content"
+          (click)="projectModalOpened.emit()"
+          type="button"
+        >
+          <svg
+            class="w-4 h-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+      <ul class="space-y-0.5">
+        @for (project of projects(); track project.id) {
+        <li class="group">
+          <div class="flex items-center gap-1">
+            <button
+              class="flex-1 flex items-center gap-3 px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+              [class.bg-base-200]="projectFilter() === project.id"
+              [class.font-medium]="projectFilter() === project.id"
+              (click)="
+                filterChanged.emit({
+                  project: project.id,
+                  type: 'all',
+                  priority: 'all',
+                  date: 'all'
+                })
+              "
+            >
+              <span class="text-lg font-bold" [style.color]="project.color">{{
+                project.icon || '#'
+              }}</span>
+              <span class="flex-1 text-left">{{ project.name }}</span>
+            </button>
+            <button
+              class="btn btn-ghost btn-xs btn-square opacity-0 group-hover:opacity-100 transition-opacity text-base-content/50 hover:text-error"
+              (click)="projectDeleted.emit({ project: project, event: $event })"
+              type="button"
+              title="Delete project"
+            >
+              <svg
+                class="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </li>
+        } @empty {
+        <li class="px-2.5 py-2 text-sm text-base-content/50">
+          No projects available
+        </li>
+        }
+      </ul>
+    </div>
+  </nav>
+</aside>

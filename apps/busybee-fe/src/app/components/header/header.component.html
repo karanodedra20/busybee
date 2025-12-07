@@ -1,0 +1,116 @@
+<!-- Header -->
+<header class="bg-base-100 border-b border-base-content/20 sticky top-0 z-10">
+  <div
+    class="flex items-center justify-between gap-4 px-4 lg:px-12 py-5 max-w-5xl"
+  >
+    <div class="flex items-center gap-3">
+      <!-- Hamburger Menu -->
+      <button
+        class="btn btn-ghost btn-sm btn-square lg:hidden"
+        (click)="sidebarToggled.emit()"
+      >
+        <svg
+          class="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M3 12h18M3 6h18M3 18h18"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      <h2 class="text-xl lg:text-2xl font-bold text-base-content truncate">
+        @if (filterType() === 'all' && priorityFilter() === 'all') { All Tasks
+        } @else if (filterType() === 'active') { Today } @else if (filterType()
+        === 'completed') { Completed } @else if (priorityFilter() !== 'all') {
+        Upcoming }
+      </h2>
+    </div>
+
+    <div class="flex items-center gap-2 lg:gap-3">
+      <!-- Search -->
+      <label
+        class="input input-sm input-bordered hidden md:flex items-center gap-2 w-60 bg-base-100 border-base-content/20"
+      >
+        <svg
+          class="w-4 h-4 text-base-content/40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" stroke-linecap="round" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          class="grow text-sm"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchChanged.emit($event)"
+        />
+      </label>
+
+      <!-- Theme Toggle -->
+      <button
+        class="btn btn-sm btn-ghost btn-circle"
+        (click)="themeToggled.emit()"
+        [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+      >
+        @if (isDarkMode()) {
+        <!-- Sun icon for light mode -->
+        <svg
+          class="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <circle cx="12" cy="12" r="5" />
+          <path
+            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+            stroke-linecap="round"
+          />
+        </svg>
+        } @else {
+        <!-- Moon icon for dark mode -->
+        <svg
+          class="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        }
+      </button>
+
+      <!-- Add Task Button -->
+      <button
+        class="btn btn-sm btn-neutral gap-1.5 normal-case font-medium"
+        (click)="createTask.emit()"
+      >
+        <svg
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+        </svg>
+        Add Task
+      </button>
+    </div>
+  </div>
+</header>

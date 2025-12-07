@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { TaskCardComponent } from '../task-card/task-card.component';
 import { TaskFormModalComponent } from '../task-form-modal/task-form-modal.component';
 import { ProjectFormModalComponent } from '../project-form-modal/project-form-modal.component';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { HeaderComponent } from '../header/header.component';
 import { TaskService } from '../../services/task.service';
 import { ProjectService } from '../../services/project.service';
 import { ToastService } from '../../services/toast.service';
@@ -33,6 +35,8 @@ type FilterType = 'all' | 'active' | 'completed';
     TaskCardComponent,
     TaskFormModalComponent,
     ProjectFormModalComponent,
+    SidebarComponent,
+    HeaderComponent,
   ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
@@ -341,7 +345,20 @@ export class TaskListComponent implements OnInit {
     this.dateFilter.set('all');
   }
 
-  trackByTaskId(index: number, task: Task): string {
+  onFilterChanged(filters: {
+    type?: FilterType;
+    priority?: Priority | 'all';
+    date?: 'all' | 'today' | 'upcoming';
+    project?: string | 'all';
+  }): void {
+    if (filters.type !== undefined) this.filterType.set(filters.type);
+    if (filters.priority !== undefined)
+      this.priorityFilter.set(filters.priority);
+    if (filters.date !== undefined) this.dateFilter.set(filters.date);
+    if (filters.project !== undefined) this.projectFilter.set(filters.project);
+  }
+
+  trackByTaskId(_index: number, task: Task): string {
     return task.id;
   }
 
