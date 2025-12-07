@@ -20,7 +20,21 @@ export class TaskCardComponent {
   get isOverdue(): boolean {
     const task = this.task();
     if (!task.dueDate || task.completed) return false;
-    return new Date(task.dueDate) < new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    return dueDate < today;
+  }
+
+  get isDueToday(): boolean {
+    const task = this.task();
+    if (!task.dueDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    return dueDate.getTime() === today.getTime();
   }
 
   get priorityColor(): string {
