@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
-import { Observable, map } from 'rxjs';
+import { Observable, map, filter } from 'rxjs';
 import { Task, CreateTaskInput, UpdateTaskInput } from '../models/task.model';
 
 const GET_TASKS = gql`
@@ -107,7 +107,10 @@ export class TaskService {
       .watchQuery<{ tasks: Task[] }>({
         query: GET_TASKS,
       })
-      .valueChanges.pipe(map((result) => (result.data?.tasks || []) as Task[]));
+      .valueChanges.pipe(
+        filter((result) => !result.loading),
+        map((result) => (result.data?.tasks || []) as Task[])
+      );
   }
 
   getTask(id: string): Observable<Task | undefined> {
