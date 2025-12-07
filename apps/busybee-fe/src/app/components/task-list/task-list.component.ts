@@ -50,7 +50,7 @@ export class TaskListComponent implements OnInit {
   filterType = signal<FilterType>('all');
   priorityFilter = signal<Priority | 'all'>('all');
   projectFilter = signal<string | 'all'>('all');
-  dateFilter = signal<'all' | 'today' | 'upcoming'>('all');
+  dateFilter = signal<'all' | 'today' | 'upcoming' | 'overdue'>('all');
 
   isModalOpen = signal(false);
   isProjectModalOpen = signal(false);
@@ -145,6 +145,13 @@ export class TaskListComponent implements OnInit {
           dueDate.setHours(0, 0, 0, 0);
           return dueDate.getTime() === today.getTime();
         });
+      } else if (dateFilterValue === 'overdue') {
+        result = result.filter((task) => {
+          if (!task.dueDate || task.completed) return false;
+          const dueDate = new Date(task.dueDate);
+          dueDate.setHours(0, 0, 0, 0);
+          return dueDate.getTime() < today.getTime();
+        });
       } else if (dateFilterValue === 'upcoming') {
         // Tasks due in the future (after today)
         result = result.filter((task) => {
@@ -175,6 +182,12 @@ export class TaskListComponent implements OnInit {
         const dueDate = new Date(t.dueDate);
         dueDate.setHours(0, 0, 0, 0);
         return dueDate.getTime() === today.getTime();
+      }).length,
+      overdue: allTasks.filter((t) => {
+        if (!t.dueDate || t.completed) return false;
+        const dueDate = new Date(t.dueDate);
+        dueDate.setHours(0, 0, 0, 0);
+        return dueDate.getTime() < today.getTime();
       }).length,
       upcoming: allTasks.filter((t) => {
         if (!t.dueDate || t.completed) return false;
@@ -334,7 +347,7 @@ export class TaskListComponent implements OnInit {
     this.projectFilter.set(projectId);
   }
 
-  setDateFilter(dateFilter: 'all' | 'today' | 'upcoming'): void {
+  setDateFilter(dateFilter: 'all' | 'today' | 'upcoming' | 'overdue'): void {
     this.dateFilter.set(dateFilter);
   }
 
@@ -348,7 +361,7 @@ export class TaskListComponent implements OnInit {
   onFilterChanged(filters: {
     type?: FilterType;
     priority?: Priority | 'all';
-    date?: 'all' | 'today' | 'upcoming';
+    date?: 'all' | 'today' | 'upcoming' | 'overdue';
     project?: string | 'all';
   }): void {
     if (filters.type !== undefined) this.filterType.set(filters.type);

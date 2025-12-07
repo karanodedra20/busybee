@@ -15,6 +15,7 @@ interface TaskStats {
   completed: number;
   today: number;
   upcoming: number;
+  overdue: number;
   highPriority: number;
 }
 
@@ -31,7 +32,7 @@ export class SidebarComponent {
   taskStats = input.required<TaskStats>();
   filterType = input.required<FilterType>();
   priorityFilter = input.required<Priority | 'all'>();
-  dateFilter = input.required<'all' | 'today' | 'upcoming'>();
+  dateFilter = input.required<'all' | 'today' | 'upcoming' | 'overdue'>();
   projectFilter = input.required<string | 'all'>();
   isSidebarOpen = input.required<boolean>();
 
@@ -40,7 +41,7 @@ export class SidebarComponent {
   filterChanged = output<{
     type?: FilterType;
     priority?: Priority | 'all';
-    date?: 'all' | 'today' | 'upcoming';
+    date?: 'all' | 'today' | 'upcoming' | 'overdue';
     project?: string | 'all';
   }>();
   sidebarClosed = output<void>();

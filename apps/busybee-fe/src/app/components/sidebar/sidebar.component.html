@@ -110,6 +110,37 @@
         <li>
           <button
             class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
+            [class.bg-base-200]="dateFilter() === 'overdue'"
+            [class.font-medium]="dateFilter() === 'overdue'"
+            (click)="
+              filterChanged.emit({
+                date: 'overdue',
+                type: 'active',
+                priority: 'all',
+                project: 'all'
+              })
+            "
+          >
+            <div class="flex items-center gap-3">
+              <svg
+                class="w-5 h-5 text-error"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5zm7 5h5v5h-5z"
+                />
+              </svg>
+              <span>Overdue</span>
+            </div>
+            <span class="text-xs text-base-content/50 font-medium">{{
+              taskStats().overdue
+            }}</span>
+          </button>
+        </li>
+        <li>
+          <button
+            class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
             [class.bg-base-200]="dateFilter() === 'upcoming'"
             [class.font-medium]="dateFilter() === 'upcoming'"
             (click)="

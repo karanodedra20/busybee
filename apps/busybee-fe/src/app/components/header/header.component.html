@@ -25,10 +25,13 @@
       </button>
 
       <h2 class="text-xl lg:text-2xl font-bold text-base-content truncate">
-        @if (filterType() === 'all' && priorityFilter() === 'all') { All Tasks
-        } @else if (filterType() === 'active') { Today } @else if (filterType()
-        === 'completed') { Completed } @else if (priorityFilter() !== 'all') {
-        Upcoming }
+        @if (dateFilter() === 'today') { Today }
+        @else if (dateFilter() === 'overdue') { Overdue }
+        @else if (dateFilter() === 'upcoming') { Upcoming }
+        @else if (filterType() === 'completed') { Completed }
+        @else if (filterType() === 'active') { Active }
+        @else if (priorityFilter() !== 'all') { Filtered }
+        @else { All Tasks }
       </h2>
     </div>
 

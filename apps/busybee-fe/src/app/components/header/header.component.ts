@@ -20,6 +20,7 @@ export class HeaderComponent {
   // Inputs
   filterType = input.required<FilterType>();
   priorityFilter = input.required<string>();
+  dateFilter = input.required<'all' | 'today' | 'upcoming' | 'overdue'>();
   searchQuery = input.required<string>();
   isDarkMode = input.required<boolean>();
 
