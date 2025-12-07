@@ -3,11 +3,15 @@ import {
   Component,
   input,
   output,
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-type FilterType = 'all' | 'active' | 'completed';
+import {
+  FilterType,
+  DateFilterType,
+  PriorityFilterType,
+} from '../../models/filter.types';
 
 @Component({
   selector: 'app-header',
@@ -19,8 +23,8 @@ type FilterType = 'all' | 'active' | 'completed';
 export class HeaderComponent {
   // Inputs
   filterType = input.required<FilterType>();
-  priorityFilter = input.required<string>();
-  dateFilter = input.required<'all' | 'today' | 'upcoming' | 'overdue'>();
+  priorityFilter = input.required<PriorityFilterType>();
+  dateFilter = input.required<DateFilterType>();
   searchQuery = input.required<string>();
   isDarkMode = input.required<boolean>();
 
@@ -29,4 +33,23 @@ export class HeaderComponent {
   searchChanged = output<string>();
   themeToggled = output<void>();
   createTask = output<void>();
+
+  // Computed
+  pageTitle = computed(() => {
+    const dateFilter = this.dateFilter();
+    const filterType = this.filterType();
+    const priorityFilter = this.priorityFilter();
+
+    if (dateFilter === 'today') return 'Today';
+    if (dateFilter === 'overdue') return 'Overdue';
+    if (dateFilter === 'upcoming') return 'Upcoming';
+    if (filterType === 'completed') return 'Completed';
+    if (filterType === 'active') return 'Active';
+    if (priorityFilter !== 'all') return 'Filtered';
+    return 'All Tasks';
+  });
+
+  themeToggleTitle = computed(() =>
+    this.isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'
+  );
 }

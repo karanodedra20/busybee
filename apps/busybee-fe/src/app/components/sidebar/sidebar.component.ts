@@ -5,19 +5,15 @@ import {
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Project, Priority } from '../../models/task.model';
-
-type FilterType = 'all' | 'active' | 'completed';
-
-interface TaskStats {
-  total: number;
-  active: number;
-  completed: number;
-  today: number;
-  upcoming: number;
-  overdue: number;
-  highPriority: number;
-}
+import { Project } from '../../models/task.model';
+import {
+  FilterType,
+  DateFilterType,
+  PriorityFilterType,
+  ProjectFilterType,
+  TaskStats,
+  FilterChangeEvent,
+} from '../../models/filter.types';
 
 @Component({
   selector: 'app-sidebar',
@@ -31,19 +27,14 @@ export class SidebarComponent {
   projects = input.required<Project[]>();
   taskStats = input.required<TaskStats>();
   filterType = input.required<FilterType>();
-  priorityFilter = input.required<Priority | 'all'>();
-  dateFilter = input.required<'all' | 'today' | 'upcoming' | 'overdue'>();
-  projectFilter = input.required<string | 'all'>();
+  priorityFilter = input.required<PriorityFilterType>();
+  dateFilter = input.required<DateFilterType>();
+  projectFilter = input.required<ProjectFilterType>();
   isSidebarOpen = input.required<boolean>();
 
   // Outputs
   resetFilters = output<void>();
-  filterChanged = output<{
-    type?: FilterType;
-    priority?: Priority | 'all';
-    date?: 'all' | 'today' | 'upcoming' | 'overdue';
-    project?: string | 'all';
-  }>();
+  filterChanged = output<FilterChangeEvent>();
   sidebarClosed = output<void>();
   projectModalOpened = output<void>();
   projectDeleted = output<{ project: Project; event: Event }>();

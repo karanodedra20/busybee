@@ -25,13 +25,7 @@
       </button>
 
       <h2 class="text-xl lg:text-2xl font-bold text-base-content truncate">
-        @if (dateFilter() === 'today') { Today }
-        @else if (dateFilter() === 'overdue') { Overdue }
-        @else if (dateFilter() === 'upcoming') { Upcoming }
-        @else if (filterType() === 'completed') { Completed }
-        @else if (filterType() === 'active') { Active }
-        @else if (priorityFilter() !== 'all') { Filtered }
-        @else { All Tasks }
+        {{ pageTitle() }}
       </h2>
     </div>
 
@@ -63,7 +57,7 @@
       <button
         class="btn btn-sm btn-ghost btn-circle"
         (click)="themeToggled.emit()"
-        [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+        [title]="themeToggleTitle()"
       >
         @if (isDarkMode()) {
         <!-- Sun icon for light mode -->

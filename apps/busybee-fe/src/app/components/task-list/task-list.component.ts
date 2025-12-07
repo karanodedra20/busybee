@@ -24,8 +24,14 @@ import {
   UpdateTaskInput,
   Project,
 } from '../../models/task.model';
-
-type FilterType = 'all' | 'active' | 'completed';
+import {
+  FilterType,
+  DateFilterType,
+  PriorityFilterType,
+  ProjectFilterType,
+  TaskStats,
+  FilterChangeEvent,
+} from '../../models/filter.types';
 
 @Component({
   selector: 'app-task-list',
@@ -48,9 +54,9 @@ export class TaskListComponent implements OnInit {
   error = signal<string | null>(null);
   searchQuery = signal('');
   filterType = signal<FilterType>('all');
-  priorityFilter = signal<Priority | 'all'>('all');
-  projectFilter = signal<string | 'all'>('all');
-  dateFilter = signal<'all' | 'today' | 'upcoming' | 'overdue'>('all');
+  priorityFilter = signal<PriorityFilterType>('all');
+  projectFilter = signal<ProjectFilterType>('all');
+  dateFilter = signal<DateFilterType>('all');
 
   isModalOpen = signal(false);
   isProjectModalOpen = signal(false);
@@ -166,7 +172,7 @@ export class TaskListComponent implements OnInit {
     return result;
   });
 
-  taskStats = computed(() => {
+  taskStats = computed<TaskStats>(() => {
     const allTasks = this.tasks();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -339,15 +345,15 @@ export class TaskListComponent implements OnInit {
     this.filterType.set(filter);
   }
 
-  setPriorityFilter(priority: Priority | 'all'): void {
+  setPriorityFilter(priority: PriorityFilterType): void {
     this.priorityFilter.set(priority);
   }
 
-  setProjectFilter(projectId: string | 'all'): void {
+  setProjectFilter(projectId: ProjectFilterType): void {
     this.projectFilter.set(projectId);
   }
 
-  setDateFilter(dateFilter: 'all' | 'today' | 'upcoming' | 'overdue'): void {
+  setDateFilter(dateFilter: DateFilterType): void {
     this.dateFilter.set(dateFilter);
   }
 
@@ -358,12 +364,7 @@ export class TaskListComponent implements OnInit {
     this.dateFilter.set('all');
   }
 
-  onFilterChanged(filters: {
-    type?: FilterType;
-    priority?: Priority | 'all';
-    date?: 'all' | 'today' | 'upcoming' | 'overdue';
-    project?: string | 'all';
-  }): void {
+  onFilterChanged(filters: FilterChangeEvent): void {
     if (filters.type !== undefined) this.filterType.set(filters.type);
     if (filters.priority !== undefined)
       this.priorityFilter.set(filters.priority);
