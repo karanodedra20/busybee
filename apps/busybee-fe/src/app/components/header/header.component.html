@@ -108,6 +108,30 @@
         </svg>
         Add Task
       </button>
+
+      <!-- Logout Button -->
+      @if (isLoggedIn()) {
+      <button
+        class="btn btn-sm btn-ghost gap-1.5 normal-case font-medium text-error hover:bg-error/10"
+        (click)="logout.emit()"
+        title="Logout"
+      >
+        <svg
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span class="hidden sm:inline">Logout</span>
+      </button>
+      }
     </div>
   </div>
 </header>

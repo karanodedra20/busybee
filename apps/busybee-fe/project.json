@@ -7,7 +7,7 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular/build:application",
+      "executor": "@ngx-env/builder:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/busybee-fe",
@@ -55,7 +55,7 @@
     },
     "serve": {
       "continuous": true,
-      "executor": "@angular/build:dev-server",
+      "executor": "@ngx-env/builder:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "busybee-fe:build:production"

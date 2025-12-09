@@ -49,3 +49,9 @@ test-output
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+
+# Environment files with secrets
+apps/busybee-be/firebase-service-account.json
+.env
+.env.local
+.env.production

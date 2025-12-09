@@ -11,6 +11,8 @@ Busybee is a comprehensive task management system that helps you organize your w
 ### Frontend (busybee-fe)
 
 - **Framework**: Angular 20 with Signals & Standalone Components
+- **Authentication**: Firebase Authentication (@angular/fire)
+- **Environment Variables**: @ngx-env/builder
 - **Styling**: Tailwind CSS & DaisyUI
 - **State Management**: Angular Signals
 - **API Communication**: Apollo Client (GraphQL)
@@ -19,6 +21,7 @@ Busybee is a comprehensive task management system that helps you organize your w
 ### Backend (busybee-be)
 
 - **Framework**: NestJS
+- **Authentication**: Firebase Admin SDK
 - **API**: GraphQL with Apollo Server v4
 - **Database ORM**: Prisma
 - **Database**: PostgreSQL (Neon serverless)
@@ -60,6 +63,40 @@ npm install
 cp apps/busybee-be/.env.example apps/busybee-be/.env
 # Configure your DATABASE_URL in .env
 ```
+
+### Firebase Authentication Setup
+
+This project uses Firebase Authentication with environment variable injection via `@ngx-env/builder`.
+
+#### 1. Frontend Firebase Configuration
+
+```sh
+# Copy .env.example to .env at project root
+cp .env.example .env
+```
+
+Then update `.env` with your actual Firebase credentials from [Firebase Console](https://console.firebase.google.com/) > Project Settings > General > Your apps.
+
+```env
+NG_APP_FIREBASE_API_KEY=your-actual-api-key
+NG_APP_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
+NG_APP_FIREBASE_PROJECT_ID=your-project-id
+# ... etc
+```
+
+**Important:** The `.env` file is gitignored and contains your secrets. Never commit it. The environment files (`environment.ts`, `environment.prod.ts`) reference these variables using `import.meta.env.NG_APP_*` and are safe to commit.
+
+#### 2. Backend Firebase Service Account
+
+The backend requires a Firebase service account JSON file:
+
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Navigate to Project Settings > Service Accounts
+3. Click "Generate New Private Key"
+4. Download the JSON file
+5. Save it as `apps/busybee-be/firebase-service-account.json`
+
+**Important:** This file is gitignored and should never be committed.
 
 ### Database Setup
 
@@ -136,6 +173,7 @@ busybee/
 
 ## ✨ Features
 
+- **Firebase Authentication**: Email/Password & Google OAuth sign-in
 - **Task Management**: Create, update, delete, and organize tasks
 - **Project Organization**: Group tasks into projects with custom colors and icons
 - **Tags System**: Flexible tagging for cross-project organization
@@ -144,7 +182,9 @@ busybee/
 - **Search**: Find tasks quickly by title
 - **Filtering**: Filter tasks by project, tags, priority, and completion status
 - **GraphQL API**: Modern, efficient API with type safety
+- **Protected Routes**: Auth guards for secure access
 - **Responsive Design**: Mobile-friendly interface with DaisyUI components
+- **Dark/Light Theme**: Toggle between themes
 
 ## 🧪 Testing
 
@@ -226,6 +266,14 @@ NODE_ENV=development
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3000/graphql',
+  firebase: {
+    apiKey: 'your-api-key',
+    authDomain: 'your-project-id.firebaseapp.com',
+    projectId: 'your-project-id',
+    storageBucket: 'your-project-id.appspot.com',
+    messagingSenderId: 'your-messaging-sender-id',
+    appId: 'your-app-id',
+  },
 };
 ```
 
@@ -235,8 +283,18 @@ export const environment = {
 export const environment = {
   production: true,
   apiUrl: 'https://busybee-g318.onrender.com/graphql',
+  firebase: {
+    apiKey: 'your-api-key',
+    authDomain: 'your-project-id.firebaseapp.com',
+    projectId: 'your-project-id',
+    storageBucket: 'your-project-id.appspot.com',
+    messagingSenderId: 'your-messaging-sender-id',
+    appId: 'your-app-id',
+  },
 };
 ```
+
+**⚠️ Security Note:** Environment variables are injected at build time from `.env` file. The `.env` file is gitignored and should never be committed. For production deployments, set these environment variables in your hosting platform's dashboard.
 
 ## 🚀 Deployment
 

@@ -4,6 +4,7 @@ import {
   input,
   output,
   computed,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import {
   DateFilterType,
   PriorityFilterType,
 } from '../../models/filter.types';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +23,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
+  private authService = inject(AuthService);
+
   // Inputs
   filterType = input.required<FilterType>();
   priorityFilter = input.required<PriorityFilterType>();
@@ -33,8 +37,11 @@ export class HeaderComponent {
   searchChanged = output<string>();
   themeToggled = output<void>();
   createTask = output<void>();
+  logout = output<void>();
 
   // Computed
+  isLoggedIn = computed(() => this.authService.currentUser() !== null);
+
   pageTitle = computed(() => {
     const dateFilter = this.dateFilter();
     const filterType = this.filterType();

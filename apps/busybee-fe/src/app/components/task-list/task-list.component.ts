@@ -17,6 +17,8 @@ import { HeaderComponent } from '../header/header.component';
 import { TaskService } from '../../services/task.service';
 import { ProjectService } from '../../services/project.service';
 import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 import {
   Task,
   Priority,
@@ -212,6 +214,8 @@ export class TaskListComponent implements OnInit {
   private taskService = inject(TaskService);
   private projectService = inject(ProjectService);
   private toastService = inject(ToastService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadTasks();
@@ -382,6 +386,17 @@ export class TaskListComponent implements OnInit {
 
   toggleSidebar(): void {
     this.isSidebarOpen.update((v) => !v);
+  }
+
+  async onLogout(): Promise<void> {
+    try {
+      await this.authService.signOut();
+      this.toastService.success('Logged out successfully');
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error logging out:', error);
+      this.toastService.error('Failed to logout');
+    }
   }
 
   closeSidebar(): void {

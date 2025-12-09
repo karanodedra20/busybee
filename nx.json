@@ -97,5 +97,8 @@
     "@schematics/angular:guard": {
       "type": "guard"
     }
+  },
+  "tui": {
+    "enabled": false
   }
 }
