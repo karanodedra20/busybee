@@ -66,6 +66,11 @@
     "packages/*",
     "apps/*"
   ],
+  "overrides": {
+    "@apollo/server-plugin-landing-page-graphql-playground": {
+      "@apollo/server": "$@apollo/server"
+    }
+  },
   "dependencies": {
     "@angular-devkit/build-angular": "~20.3.0",
     "@angular/common": "~20.3.0",
@@ -76,7 +81,7 @@
     "@angular/platform-browser": "~20.3.0",
     "@angular/router": "~20.3.0",
     "@apollo/client": "^4.0.9",
-    "@apollo/server": "^4.11.2",
+    "@apollo/server": "^5.2.0",
     "@as-integrations/express5": "^1.1.2",
     "@nestjs/apollo": "^13.2.1",
     "@nestjs/common": "^11.0.0",
