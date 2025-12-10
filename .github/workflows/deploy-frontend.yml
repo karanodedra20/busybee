@@ -19,6 +19,6 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy frontend to Fly.io
-        run: fly deploy --config apps/busybee-fe/fly.toml -a busybee
+        run: flyctl deploy --config apps/busybee-fe/fly.toml -a busybee
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
