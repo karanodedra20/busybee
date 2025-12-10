@@ -33,6 +33,9 @@ export class Task {
   @Field(() => String, { description: 'Associated project ID' })
   projectId!: string;
 
+  @Field(() => String, { description: 'User ID who owns this task' })
+  userId!: string;
+
   @Field(() => Date, { description: 'Task creation timestamp' })
   createdAt!: Date;
 

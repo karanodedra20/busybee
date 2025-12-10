@@ -16,6 +16,9 @@ export class Project {
   @Field(() => String, { nullable: true, description: 'Project icon' })
   icon?: string | null;
 
+  @Field(() => String, { description: 'User ID who owns this project' })
+  userId!: string;
+
   @Field(() => Date, { description: 'Creation date' })
   createdAt!: Date;
 
