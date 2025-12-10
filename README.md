@@ -36,13 +36,13 @@ Busybee is a comprehensive task management system that helps you organize your w
 
 ## 🌐 Live Deployment
 
-- **Frontend**: [Netlify](https://busybee-tasks.netlify.app)
-- **Backend API**: https://busybee-g318.onrender.com/graphql
+- **Frontend**: https://busybee.fly.dev
+- **Backend API**: https://busybee-backend.fly.dev/graphql
 
 The application is deployed using:
 
-- **Frontend**: Netlify (static build)
-- **Backend**: Render (Web Service)
+- **Frontend**: Fly.io (Docker with nginx)
+- **Backend**: Fly.io (Docker with Node.js)
 - **Database**: Neon (Serverless PostgreSQL)
 
 ## 🏃 Getting Started
@@ -282,7 +282,7 @@ export const environment = {
 ```typescript
 export const environment = {
   production: true,
-  apiUrl: 'https://busybee-g318.onrender.com/graphql',
+  apiUrl: 'https://busybee-backend.fly.dev/graphql',
   firebase: {
     apiKey: 'your-api-key',
     authDomain: 'your-project-id.firebaseapp.com',
@@ -298,27 +298,40 @@ export const environment = {
 
 ## 🚀 Deployment
 
-### Backend (Render)
+This application is deployed to **Fly.io** for both frontend and backend with **no cold starts**.
 
-1. Create a new Web Service on [Render](https://render.com)
-2. Connect your GitHub repository
-3. Configure the service:
-   - **Build Command**: `npm install && npx nx build busybee-be`
-   - **Start Command**: `node apps/busybee-be/dist/main.js`
-   - **Environment**: Node
-4. Add environment variable: `DATABASE_URL` (your Neon PostgreSQL connection string)
-5. Deploy!
+### Quick Start
 
-### Frontend (Netlify)
+```bash
+# Install Fly CLI
+brew install flyctl
 
-1. Create a new site on [Netlify](https://netlify.com)
-2. Connect your GitHub repository
-3. Configure build settings:
-   - **Build Command**: `nx build busybee-fe --configuration=production`
-   - **Publish Directory**: `dist/apps/busybee-fe/browser`
-4. Deploy!
+# Login
+fly auth login
 
-The frontend automatically uses the production API URL when built with the production configuration.
+# Deploy backend
+fly deploy --config apps/busybee-be/fly.toml -a busybee-backend
+
+# Deploy frontend
+fly deploy --config apps/busybee-fe/fly.toml -a busybee-frontend
+```
+
+### Detailed Instructions
+
+See [FLY_DEPLOYMENT.md](./FLY_DEPLOYMENT.md) for complete step-by-step deployment guide including:
+
+- Setting up Firebase credentials
+- Configuring environment variables
+- Managing secrets
+- Scaling and monitoring
+- Troubleshooting
+
+### Key Benefits of Fly.io
+
+✅ **No cold starts** - Apps stay running 24/7
+✅ **Free tier** - 3 VMs with 256MB RAM each
+✅ **Fast global edge network**
+✅ **Simple deployment** with Docker
 
 ## 🎨 Frontend Architecture
 

@@ -1,5 +1,5 @@
 import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
-import { Priority } from '../../../generated/prisma/client';
+import { Priority } from '@prisma/client';
 
 // Register the Prisma Priority enum with GraphQL
 registerEnumType(Priority, {

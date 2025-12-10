@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: import.meta.env.NG_APP_API_URL || 'https://busybee-g318.onrender.com/graphql',
+  apiUrl: import.meta.env.NG_APP_API_URL || 'https://busybee-backend.fly.dev/graphql',
   firebase: {
     apiKey: import.meta.env.NG_APP_FIREBASE_API_KEY,
     authDomain: import.meta.env.NG_APP_FIREBASE_AUTH_DOMAIN,

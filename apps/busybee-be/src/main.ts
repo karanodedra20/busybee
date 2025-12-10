@@ -15,8 +15,8 @@ async function bootstrap() {
     origin: [
       'http://localhost:4200',
       'http://localhost:4000',
-      /\.netlify\.app$/, // Allow all Netlify preview deployments
-      /\.netlify\.live$/, // Allow Netlify domain
+      'https://busybee.fly.dev', // Fly.io production frontend
+      /\.fly\.dev$/, // Allow all fly.dev subdomains
     ],
     credentials: true,
   });

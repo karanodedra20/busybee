@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://busybee-g318.onrender.com/graphql',
+  apiUrl: 'https://busybee-backend.fly.dev/graphql',
   firebase: {
     apiKey: 'YOUR_PROD_API_KEY',
     authDomain: 'YOUR_PROD_AUTH_DOMAIN',

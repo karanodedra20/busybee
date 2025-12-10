@@ -1,0 +1,44 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist
+tmp
+out-tsc
+.nx/cache
+
+# IDE
+.idea
+.vscode
+*.sublime-workspace
+.DS_Store
+
+# Testing
+coverage
+.nyc_output
+test-output
+
+# Environment files
+.env
+.env.local
+.env.production
+apps/busybee-be/firebase-service-account.json
+
+# Git
+.git
+.gitignore
+
+# Docs
+*.md
+!README.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Other
+.angular
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
