@@ -23,8 +23,8 @@ ENV NX_DAEMON=false
 # Sync Nx workspace (fixes TypeScript project references)
 RUN npx nx sync
 
-# Generate Prisma client for Linux
-RUN cd apps/busybee-be && npx prisma generate
+# Generate Prisma client for Linux (using schema path directly, bypassing prisma.config.ts)
+RUN cd apps/busybee-be && npx prisma generate --schema=prisma/schema.prisma
 
 # Build the backend
 RUN npx nx build busybee-be --configuration=production
