@@ -2,7 +2,17 @@
   "name": "@busybee/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "nx run-many --targets=serve --projects=busybee-be,busybee-fe --parallel",
+    "dev:be": "nx serve busybee-be",
+    "dev:fe": "nx serve busybee-fe",
+    "build": "nx run-many --targets=build --projects=busybee-be,busybee-fe",
+    "build:be": "nx build busybee-be",
+    "build:fe": "nx build busybee-fe",
+    "deploy:be": "fly deploy --config apps/busybee-be/fly.toml -a busybee-backend",
+    "deploy:fe": "fly deploy --config apps/busybee-fe/fly.toml -a busybee",
+    "deploy": "npm run deploy:be && npm run deploy:fe"
+  },
   "private": true,
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~1.19.1",
