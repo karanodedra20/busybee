@@ -102,62 +102,58 @@ Your backend will be available at: `https://busybee-backend.fly.dev`
 
 ## Deploy Frontend (Angular)
 
-### Step 1: Update Backend URL
+### Step 1: Configure Production Environment
 
-First, note your backend URL from the previous deployment. It should be:
-`https://busybee-backend.fly.dev/graphql`
+The frontend uses hardcoded Firebase configuration in `apps/busybee-fe/src/environments/environment.prod.ts`. This is safe because Firebase client-side config is not secret - it's exposed in every browser request. Security comes from Firebase Security Rules, not hiding these values.
+
+Update `environment.prod.ts` with your Firebase config:
+
+```typescript
+export const environment = {
+  production: true,
+  apiUrl: 'https://busybee-backend.fly.dev/graphql',
+  firebase: {
+    apiKey: 'your-api-key',
+    authDomain: 'your-project-id.firebaseapp.com',
+    projectId: 'your-project-id',
+    storageBucket: 'your-project-id.firebasestorage.app',
+    messagingSenderId: 'your-sender-id',
+    appId: 'your-app-id',
+  },
+};
+```
 
 ### Step 2: Launch the Frontend App
 
 ```bash
 fly launch \
-  --name busybee-frontend \
-  --region fra \
+  --name busybee \
+  --region ams \
   --config apps/busybee-fe/fly.toml \
   --dockerfile apps/busybee-fe/Dockerfile \
   --no-deploy
 ```
 
-### Step 3: Set Build-Time Environment Variables
-
-Angular apps need environment variables at **build time**, not runtime. Set them as secrets:
+### Step 3: Deploy Frontend
 
 ```bash
-# Backend API URL
-fly secrets set NG_APP_API_URL="https://busybee-backend.fly.dev/graphql" -a busybee-frontend
-
-# Firebase configuration (from your Firebase Console)
-fly secrets set NG_APP_FIREBASE_API_KEY="your-api-key" -a busybee-frontend
-fly secrets set NG_APP_FIREBASE_AUTH_DOMAIN="your-project-id.firebaseapp.com" -a busybee-frontend
-fly secrets set NG_APP_FIREBASE_PROJECT_ID="your-project-id" -a busybee-frontend
-fly secrets set NG_APP_FIREBASE_STORAGE_BUCKET="your-project-id.appspot.com" -a busybee-frontend
-fly secrets set NG_APP_FIREBASE_MESSAGING_SENDER_ID="your-sender-id" -a busybee-frontend
-fly secrets set NG_APP_FIREBASE_APP_ID="your-app-id" -a busybee-frontend
-fly secrets set NG_APP_FIREBASE_MEASUREMENT_ID="your-measurement-id" -a busybee-frontend
+fly deploy --config apps/busybee-fe/fly.toml -a busybee
 ```
 
-**Note:** When you set secrets, Fly.io automatically triggers a new build with these environment variables.
-
-### Step 4: Deploy Frontend
-
-```bash
-fly deploy --config apps/busybee-fe/fly.toml --dockerfile apps/busybee-fe/Dockerfile -a busybee-frontend
-```
-
-### Step 5: Verify Deployment
+### Step 4: Verify Deployment
 
 ```bash
 # Check status
-fly status -a busybee-frontend
+fly status -a busybee
 
 # View logs
-fly logs -a busybee-frontend
+fly logs -a busybee
 
 # Open in browser
-fly open -a busybee-frontend
+fly open -a busybee
 ```
 
-Your frontend will be available at: `https://busybee-frontend.fly.dev`
+Your frontend will be available at: `https://busybee.fly.dev`
 
 ---
 
@@ -172,7 +168,7 @@ app.enableCors({
   origin: [
     'http://localhost:4200',
     'http://localhost:4000',
-    'https://busybee-frontend.fly.dev',
+    'https://busybee.fly.dev',
     /\.fly\.dev$/, // Allow all fly.dev subdomains
   ],
   credentials: true,
@@ -464,10 +460,10 @@ fly status -a busybee-frontend
 - No cold starts with `min_machines_running = 1`
 - Firebase Admin SDK with base64 encoded credentials
 
-✅ **Frontend:** `https://busybee-frontend.fly.dev`
+✅ **Frontend:** `https://busybee.fly.dev`
 
 - Angular SPA served with nginx
-- Environment variables baked in at build time
+- Firebase config hardcoded in `environment.prod.ts` (safe - client config is public)
 - Automatic HTTPS and caching
 
 Both apps run 24/7 with no cold starts, perfect for production use!

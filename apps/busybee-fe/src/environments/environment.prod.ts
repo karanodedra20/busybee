@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
-  apiUrl: import.meta.env.NG_APP_API_URL || 'https://busybee-backend.fly.dev/graphql',
+  apiUrl: 'https://busybee-backend.fly.dev/graphql',
   firebase: {
-    apiKey: import.meta.env.NG_APP_FIREBASE_API_KEY,
-    authDomain: import.meta.env.NG_APP_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.NG_APP_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.NG_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.NG_APP_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.NG_APP_FIREBASE_APP_ID,
+    apiKey: 'AIzaSyAtp_V7OwKe5AsOxAc58LyH-pilSQ1KUzc',
+    authDomain: 'busybee-2025.firebaseapp.com',
+    projectId: 'busybee-2025',
+    storageBucket: 'busybee-2025.firebasestorage.app',
+    messagingSenderId: '940692288292',
+    appId: '1:940692288292:web:f44db0eb95f3c8027039b1',
   },
 };

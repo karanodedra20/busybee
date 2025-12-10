@@ -12,7 +12,6 @@ Busybee is a comprehensive task management system that helps you organize your w
 
 - **Framework**: Angular 20 with Signals & Standalone Components
 - **Authentication**: Firebase Authentication (@angular/fire)
-- **Environment Variables**: @ngx-env/builder
 - **Styling**: Tailwind CSS & DaisyUI
 - **State Management**: Angular Signals
 - **API Communication**: Apollo Client (GraphQL)
@@ -66,25 +65,13 @@ cp apps/busybee-be/.env.example apps/busybee-be/.env
 
 ### Firebase Authentication Setup
 
-This project uses Firebase Authentication with environment variable injection via `@ngx-env/builder`.
-
 #### 1. Frontend Firebase Configuration
 
-```sh
-# Copy .env.example to .env at project root
-cp .env.example .env
-```
+Firebase client-side configuration is stored directly in the environment files (`apps/busybee-fe/src/environments/`). This is safe because Firebase client config is not secret - it's exposed in every browser request. Security comes from Firebase Security Rules.
 
-Then update `.env` with your actual Firebase credentials from [Firebase Console](https://console.firebase.google.com/) > Project Settings > General > Your apps.
-
-```env
-NG_APP_FIREBASE_API_KEY=your-actual-api-key
-NG_APP_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
-NG_APP_FIREBASE_PROJECT_ID=your-project-id
-# ... etc
-```
-
-**Important:** The `.env` file is gitignored and contains your secrets. Never commit it. The environment files (`environment.ts`, `environment.prod.ts`) reference these variables using `import.meta.env.NG_APP_*` and are safe to commit.
+To use your own Firebase project, update the values in:
+- `environment.ts` (development)
+- `environment.prod.ts` (production)
 
 #### 2. Backend Firebase Service Account
 
@@ -250,7 +237,7 @@ npx prisma studio
 
 ## 📝 Environment Variables
 
-### Backend (.env)
+### Backend (`apps/busybee-be/.env`)
 
 ```env
 DATABASE_URL="postgresql://user:password@host:port/database"
@@ -258,43 +245,12 @@ PORT=3000
 NODE_ENV=development
 ```
 
-### Frontend (environment files)
+### Frontend
 
-**Development** (`apps/busybee-fe/src/environments/environment.ts`):
+Firebase configuration is stored directly in the environment files at `apps/busybee-fe/src/environments/`. This is safe because Firebase client config is public by design - security comes from Firebase Security Rules.
 
-```typescript
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/graphql',
-  firebase: {
-    apiKey: 'your-api-key',
-    authDomain: 'your-project-id.firebaseapp.com',
-    projectId: 'your-project-id',
-    storageBucket: 'your-project-id.appspot.com',
-    messagingSenderId: 'your-messaging-sender-id',
-    appId: 'your-app-id',
-  },
-};
-```
-
-**Production** (`apps/busybee-fe/src/environments/environment.prod.ts`):
-
-```typescript
-export const environment = {
-  production: true,
-  apiUrl: 'https://busybee-backend.fly.dev/graphql',
-  firebase: {
-    apiKey: 'your-api-key',
-    authDomain: 'your-project-id.firebaseapp.com',
-    projectId: 'your-project-id',
-    storageBucket: 'your-project-id.appspot.com',
-    messagingSenderId: 'your-messaging-sender-id',
-    appId: 'your-app-id',
-  },
-};
-```
-
-**⚠️ Security Note:** Environment variables are injected at build time from `.env` file. The `.env` file is gitignored and should never be committed. For production deployments, set these environment variables in your hosting platform's dashboard.
+- `environment.ts` - Development config (localhost API)
+- `environment.prod.ts` - Production config (Fly.io API)
 
 ## 🚀 Deployment
 
@@ -313,7 +269,7 @@ fly auth login
 fly deploy --config apps/busybee-be/fly.toml -a busybee-backend
 
 # Deploy frontend
-fly deploy --config apps/busybee-fe/fly.toml -a busybee-frontend
+fly deploy --config apps/busybee-fe/fly.toml -a busybee
 ```
 
 ### Detailed Instructions
