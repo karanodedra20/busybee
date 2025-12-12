@@ -185,30 +185,57 @@
         >
           Tags
         </label>
-        <div class="flex gap-2 mb-3">
+        <div class="relative mb-3">
           <input
             id="tag-input"
             type="text"
-            placeholder="Add a tag..."
-            class="input input-bordered input-sm flex-1"
+            placeholder="Search or create a tag..."
+            class="input input-bordered input-sm w-full"
             [ngModel]="tagInput()"
-            (ngModelChange)="tagInput.set($event)"
+            (ngModelChange)="onTagInputChange($event)"
             [ngModelOptions]="{ standalone: true }"
             (keypress)="onTagInputKeyPress($event)"
+            (focus)="onTagInputFocus()"
+            (blur)="onTagInputBlur()"
             autocomplete="off"
           />
-          <button type="button" class="btn btn-sm btn-ghost" (click)="addTag()">
-            <svg
-              class="w-4 h-4"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M12 5v14M5 12h14" stroke-linecap="round" />
-            </svg>
-            Add
-          </button>
+          @if (showTagDropdown() && (filteredTags().length > 0 ||
+          shouldShowCreateOption())) {
+          <ul
+            class="absolute z-50 w-full mt-1 bg-base-100 border border-base-300 rounded-box shadow-lg max-h-48 overflow-y-auto"
+          >
+            @for (tag of filteredTags(); track tag) {
+            <li>
+              <button
+                type="button"
+                class="w-full px-3 py-2 text-left text-sm hover:bg-base-200 transition-colors"
+                (mousedown)="selectTag(tag)"
+              >
+                {{ tag }}
+              </button>
+            </li>
+            } @if (shouldShowCreateOption()) {
+            <li>
+              <button
+                type="button"
+                class="w-full px-3 py-2 text-left text-sm hover:bg-base-200 transition-colors flex items-center gap-2 text-primary"
+                (mousedown)="createNewTag()"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+                </svg>
+                Create "{{ tagInput() }}"
+              </button>
+            </li>
+            }
+          </ul>
+          }
         </div>
         @if (tags.length > 0) {
         <div class="flex flex-wrap gap-2">

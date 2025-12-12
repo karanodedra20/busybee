@@ -24,6 +24,7 @@ import {
   Project,
 } from '../../models/task.model';
 import { ProjectService } from '../../services/project.service';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-form-modal',
@@ -35,6 +36,7 @@ import { ProjectService } from '../../services/project.service';
 export class TaskFormModalComponent implements OnInit {
   private fb = inject(FormBuilder);
   private projectService = inject(ProjectService);
+  private taskService = inject(TaskService);
 
   isOpen = input.required<boolean>();
   task = input<Task | null>(null);
@@ -47,6 +49,9 @@ export class TaskFormModalComponent implements OnInit {
   readonly priorities = Object.values(Priority);
   tagInput = signal('');
   projects = signal<Project[]>([]);
+  allTags = signal<string[]>([]);
+  showTagDropdown = signal(false);
+  filteredTags = signal<string[]>([]);
 
   constructor() {
     this.form = this.initializeForm();
@@ -72,6 +77,7 @@ export class TaskFormModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProjects();
+    this.loadAllTags();
   }
 
   loadProjects(): void {
@@ -83,6 +89,84 @@ export class TaskFormModalComponent implements OnInit {
         console.error('Error loading projects:', err);
       },
     });
+  }
+
+  loadAllTags(): void {
+    this.taskService.getAllTags().subscribe({
+      next: (tags) => {
+        this.allTags.set(tags);
+        this.updateFilteredTags();
+      },
+      error: (err) => {
+        console.error('Error loading tags:', err);
+      },
+    });
+  }
+
+  updateFilteredTags(): void {
+    const input = this.tagInput().toLowerCase().trim();
+    const currentTags = this.tags;
+    const availableTags = this.allTags().filter(
+      (tag) => !currentTags.includes(tag)
+    );
+
+    if (input) {
+      this.filteredTags.set(
+        availableTags.filter((tag) => tag.toLowerCase().includes(input))
+      );
+    } else {
+      this.filteredTags.set(availableTags);
+    }
+  }
+
+  onTagInputChange(value: string): void {
+    this.tagInput.set(value);
+    this.updateFilteredTags();
+    this.showTagDropdown.set(true);
+  }
+
+  onTagInputFocus(): void {
+    this.updateFilteredTags();
+    this.showTagDropdown.set(true);
+  }
+
+  onTagInputBlur(): void {
+    // Delay hiding to allow click events on dropdown items
+    setTimeout(() => this.showTagDropdown.set(false), 200);
+  }
+
+  selectTag(tag: string): void {
+    if (!this.tags.includes(tag)) {
+      const currentTags = this.tags;
+      this.form.patchValue({ tags: [...currentTags, tag] });
+    }
+    this.tagInput.set('');
+    this.updateFilteredTags();
+    this.showTagDropdown.set(false);
+  }
+
+  createNewTag(): void {
+    const tag = this.tagInput().trim();
+    if (tag && !this.tags.includes(tag)) {
+      const currentTags = this.tags;
+      this.form.patchValue({ tags: [...currentTags, tag] });
+      this.tagInput.set('');
+      this.updateFilteredTags();
+    }
+    this.showTagDropdown.set(false);
+  }
+
+  shouldShowCreateOption(): boolean {
+    const input = this.tagInput().trim();
+    if (!input) return false;
+    const lowerInput = input.toLowerCase();
+    const existsInAll = this.allTags().some(
+      (tag) => tag.toLowerCase() === lowerInput
+    );
+    const existsInCurrent = this.tags.some(
+      (tag) => tag.toLowerCase() === lowerInput
+    );
+    return !existsInAll && !existsInCurrent;
   }
 
   private initializeForm(): FormGroup {
@@ -129,7 +213,11 @@ export class TaskFormModalComponent implements OnInit {
   onTagInputKeyPress(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       event.preventDefault();
-      this.addTag();
+      if (this.filteredTags().length > 0) {
+        this.selectTag(this.filteredTags()[0]);
+      } else if (this.shouldShowCreateOption()) {
+        this.createNewTag();
+      }
     }
   }
 

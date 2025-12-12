@@ -171,4 +171,13 @@ export class TaskService {
       completed: !task.completed,
     });
   }
+
+  getAllTags(): Observable<string[]> {
+    return this.getTasks().pipe(
+      map((tasks) => {
+        const allTags = tasks.flatMap((task) => task.tags || []);
+        return [...new Set(allTags)].sort();
+      })
+    );
+  }
 }
