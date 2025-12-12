@@ -22,85 +22,76 @@
     </button>
 
     <!-- Task Content -->
-    <div class="flex-1 min-w-0 py-0.5">
-      <!-- Title -->
-      <p
-        class="text-[13.5px] leading-[1.35] text-base-content font-normal"
-        [class.line-through]="task().completed"
-        [class.text-base-content/35]="task().completed"
-      >
-        {{ task().title }}
-      </p>
-
-      <!-- Description (if exists) -->
-      @if (task().description) {
+    <div class="flex-1 min-w-0 py-0.5 flex justify-between items-end gap-4">
+      <!-- Left side: Title, Description, Tags, Priority -->
+      <div class="flex-1 min-w-0">
+        <!-- Title -->
         <p
-          class="text-[12.5px] leading-[1.4] text-base-content/45 mt-0.5"
-          [class.text-base-content/25]="task().completed"
+          class="text-[13.5px] leading-[1.35] text-base-content font-normal"
+          [class.line-through]="task().completed"
+          [class.text-base-content/35]="task().completed"
         >
-          {{ task().description }}
+          {{ task().title }}
         </p>
-      }
 
-      <!-- Metadata: Due Date, Tags, Priority -->
-      @if (task().dueDate || task().tags.length > 0) {
-        <div class="flex flex-wrap items-center gap-2 mt-2">
-          <!-- Due Date -->
-          @if (task().dueDate) {
+        <!-- Description (if exists) -->
+        @if (task().description) {
+          <p
+            class="text-[12.5px] leading-[1.4] text-base-content/45 mt-0.5"
+            [class.text-base-content/25]="task().completed"
+          >
+            {{ task().description }}
+          </p>
+        }
+
+        <!-- Metadata: Tags, Priority -->
+        @if (task().tags.length > 0 || true) {
+          <div class="flex flex-wrap items-center gap-2 mt-2">
+            <!-- Tags -->
+            @for (tag of task().tags; track tag) {
+              <span class="text-xs text-base-content/60 font-normal flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7 7h.01" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ tag }}
+              </span>
+            }
+
+            <!-- Priority Badge -->
             <span
-              class="text-[11px] px-2 py-0.5 rounded font-medium flex items-center gap-1"
-              [class.text-success]="!isOverdue && !isDueToday && !task().completed"
-              [class.bg-success/20]="!isOverdue && !isDueToday && !task().completed"
-              [class.text-warning]="isDueToday && !task().completed"
-              [class.bg-warning/20]="isDueToday && !task().completed"
-              [class.text-error]="isOverdue && !task().completed"
-              [class.bg-error/20]="isOverdue && !task().completed"
-              [class.text-base-content/40]="task().completed"
-              [class.bg-base-content/10]="task().completed"
+              class="text-xs px-3 py-1.5 rounded-full font-normal"
+              [class.text-red-700]="task().priority === Priority.HIGH"
+              [class.bg-red-100]="task().priority === Priority.HIGH"
+              [class.text-yellow-700]="task().priority === Priority.MEDIUM"
+              [class.bg-yellow-100]="task().priority === Priority.MEDIUM"
+              [class.text-gray-600]="task().priority === Priority.LOW"
+              [class.bg-gray-100]="task().priority === Priority.LOW"
             >
-              <svg class="w-[13px] h-[13px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                <path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round"/>
-              </svg>
-              {{ formatDate(task().dueDate) }}
+              {{ priorityLabel }}
             </span>
-          }
+          </div>
+        }
+      </div>
 
-          <!-- Tags -->
-          @for (tag of task().tags; track tag) {
-            <span class="text-[11px] px-2 py-0.5 rounded bg-base-content/10 text-base-content/70 font-medium">{{ tag }}</span>
-          }
-
-          <!-- Priority Badge -->
-          <span
-            class="text-[11px] px-2 py-0.5 rounded font-semibold"
-            [class.text-error]="task().priority === Priority.HIGH"
-            [class.bg-error/20]="task().priority === Priority.HIGH"
-            [class.text-warning]="task().priority === Priority.MEDIUM"
-            [class.bg-warning/20]="task().priority === Priority.MEDIUM"
-            [class.text-info]="task().priority === Priority.LOW"
-            [class.bg-info/20]="task().priority === Priority.LOW"
-          >
-            {{ task().priority }}
-          </span>
-        </div>
-      } @else {
-        <!-- Show priority badge even if no metadata -->
-        <div class="mt-2">
-          <span
-            class="text-[11px] px-2 py-0.5 rounded font-semibold inline-block"
-            [class.text-error]="task().priority === Priority.HIGH"
-            [class.bg-error/20]="task().priority === Priority.HIGH"
-            [class.text-warning]="task().priority === Priority.MEDIUM"
-            [class.bg-warning/20]="task().priority === Priority.MEDIUM"
-            [class.text-info]="task().priority === Priority.LOW"
-            [class.bg-info/20]="task().priority === Priority.LOW"
-          >
-            {{ task().priority }}
-          </span>
-        </div>
-      }
     </div>
+
+    <!-- Due Date (right side, bottom aligned) -->
+    @if (task().dueDate) {
+      <span
+        class="text-xs font-normal flex items-center gap-1.5 flex-shrink-0 self-end"
+        [class.text-base-content/60]="!isOverdue && !isDueToday && !task().completed"
+        [class.text-warning]="isDueToday && !task().completed"
+        [class.text-error]="isOverdue && !task().completed"
+        [class.text-base-content/40]="task().completed"
+      >
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round"/>
+        </svg>
+        {{ formatDate(task().dueDate) }}
+      </span>
+    }
 
     <!-- Actions (visible on hover on desktop, always visible on mobile) -->
     <div class="flex items-center gap-0.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity self-start pt-0.5">

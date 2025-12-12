@@ -41,6 +41,16 @@ export class HeaderComponent {
 
   // Computed
   isLoggedIn = computed(() => this.authService.currentUser() !== null);
+  currentUser = computed(() => this.authService.currentUser());
+  userInitials = computed(() => {
+    const user = this.currentUser();
+    if (!user?.displayName) return 'U';
+    const names = user.displayName.split(' ');
+    if (names.length >= 2) {
+      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
+    }
+    return user.displayName.substring(0, 2).toUpperCase();
+  });
 
   pageTitle = computed(() => {
     const dateFilter = this.dateFilter();

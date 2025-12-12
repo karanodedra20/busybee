@@ -51,6 +51,32 @@ export class TaskCardComponent {
     }
   }
 
+  get priorityLabel(): string {
+    const priority = this.task().priority;
+    switch (priority) {
+      case Priority.HIGH:
+        return 'High Priority';
+      case Priority.MEDIUM:
+        return 'Medium Priority';
+      case Priority.LOW:
+        return 'Low Priority';
+      default:
+        return '';
+    }
+  }
+
+  getTagColor(index: number): string {
+    const colors = [
+      'bg-purple-200 text-purple-700',
+      'bg-blue-200 text-blue-700',
+      'bg-green-200 text-green-700',
+      'bg-yellow-200 text-yellow-700',
+      'bg-orange-200 text-orange-700',
+      'bg-pink-200 text-pink-700',
+    ];
+    return colors[index % colors.length];
+  }
+
   onToggleComplete(): void {
     this.taskToggled.emit(this.task());
   }

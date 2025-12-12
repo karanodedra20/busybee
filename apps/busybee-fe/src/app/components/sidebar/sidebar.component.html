@@ -15,7 +15,10 @@
 >
   <!-- Logo -->
   <div class="px-6 py-8 flex items-center justify-between">
-    <h1 class="text-xl font-semibold text-base-content">Busy Bee</h1>
+    <div class="flex items-center gap-2.5">
+      <img src="favicon.svg" alt="Busy Bee Logo" class="w-8 h-8" />
+      <h1 class="text-xl font-normal text-base-content">Busy Bee</h1>
+    </div>
     <button
       class="btn btn-ghost btn-sm btn-square lg:hidden"
       (click)="sidebarClosed.emit()"
@@ -189,9 +192,7 @@
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
-                <path
-                  d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
-                />
+                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
               </svg>
               <span>Completed</span>
             </div>
