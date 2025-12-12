@@ -1,0 +1,203 @@
+<div class="min-h-screen bg-base-100 flex flex-col">
+  <!-- Header -->
+  <header
+    class="navbar bg-base-100 border-b border-base-content/10 px-4 lg:px-8"
+  >
+    <div class="flex-1">
+      <a routerLink="/" class="flex items-center gap-2.5">
+        <img src="favicon.svg" alt="Busy Bee Logo" class="w-8 h-8" />
+        <span class="text-xl font-semibold text-base-content">Busy Bee</span>
+      </a>
+    </div>
+    <div class="flex-none flex items-center gap-3">
+      <a routerLink="/login" class="btn btn-ghost btn-sm normal-case">
+        Log in
+      </a>
+      <a routerLink="/signup" class="btn btn-primary btn-sm normal-case">
+        Sign up
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main
+    class="flex-1 flex flex-col items-center justify-center px-4 py-16 lg:py-24"
+  >
+    <div class="max-w-4xl mx-auto text-center">
+      <!-- Hero Badge -->
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
+      >
+        <svg
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M13 10V3L4 14h7v7l9-11h-7z"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Simple. Powerful. Productive.
+      </div>
+
+      <!-- Hero Title -->
+      <h1
+        class="text-4xl lg:text-6xl font-bold text-base-content mb-6 leading-tight"
+      >
+        Stay organized,<br />
+        <span class="text-primary">get more done</span>
+      </h1>
+
+      <!-- Hero Description -->
+      <p
+        class="text-lg lg:text-xl text-base-content/60 mb-10 max-w-2xl mx-auto"
+      >
+        Busy Bee helps you manage your tasks effortlessly. Create projects, set
+        priorities, track deadlines, and boost your productivity.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div
+        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+      >
+        <a
+          routerLink="/signup"
+          class="btn btn-primary btn-lg normal-case px-8 gap-2"
+        >
+          Get Started Free
+          <svg
+            class="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M5 12h14M12 5l7 7-7 7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+        <a routerLink="/login" class="btn btn-ghost btn-lg normal-case px-8">
+          I already have an account
+        </a>
+      </div>
+
+      <!-- Features Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 text-left">
+        <!-- Feature 1 -->
+        <div
+          class="p-6 rounded-2xl bg-base-200/50 border border-base-content/5"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center mb-4"
+          >
+            <svg
+              class="w-6 h-6 text-success"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-base-content mb-2">
+            Task Management
+          </h3>
+          <p class="text-base-content/60 text-sm">
+            Create, organize, and track your tasks with ease. Set priorities and
+            due dates to stay on top of your work.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div
+          class="p-6 rounded-2xl bg-base-200/50 border border-base-content/5"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4"
+          >
+            <svg
+              class="w-6 h-6 text-primary"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-base-content mb-2">
+            Project Organization
+          </h3>
+          <p class="text-base-content/60 text-sm">
+            Group related tasks into projects. Keep everything organized and
+            find what you need quickly.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div
+          class="p-6 rounded-2xl bg-base-200/50 border border-base-content/5"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-warning/10 flex items-center justify-center mb-4"
+          >
+            <svg
+              class="w-6 h-6 text-warning"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-base-content mb-2">
+            Smart Reminders
+          </h3>
+          <p class="text-base-content/60 text-sm">
+            Never miss a deadline. Get visual cues for overdue and upcoming
+            tasks to stay ahead of schedule.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-6 px-4 border-t border-base-content/10">
+    <div
+      class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-base-content/50"
+    >
+      <p>&copy; 2025 Busy Bee. All rights reserved.</p>
+      <div class="flex items-center gap-1">
+        Made with
+        <svg class="w-4 h-4 text-error" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          />
+        </svg>
+        for productivity
+      </div>
+    </div>
+  </footer>
+</div>

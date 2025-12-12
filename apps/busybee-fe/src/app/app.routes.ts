@@ -3,12 +3,12 @@ import { authGuard } from './guards/auth.guard';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
+import { LandingComponent } from './components/landing/landing.component';
 
 export const appRoutes: Route[] = [
   {
     path: '',
-    redirectTo: 'tasks',
-    pathMatch: 'full',
+    component: LandingComponent,
   },
   {
     path: 'login',
