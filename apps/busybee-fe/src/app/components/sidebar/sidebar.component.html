@@ -50,7 +50,7 @@
         <li>
           <button
             class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
-            [class.bg-base-200]="
+            [class.bg-base-content/10]="
               filterType() === 'all' &&
               priorityFilter() === 'all' &&
               dateFilter() === 'all' &&
@@ -82,7 +82,7 @@
         <li>
           <button
             class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
-            [class.bg-base-200]="dateFilter() === 'today'"
+            [class.bg-base-content/10]="dateFilter() === 'today'"
             [class.font-medium]="dateFilter() === 'today'"
             (click)="
               filterChanged.emit({
@@ -113,7 +113,7 @@
         <li>
           <button
             class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
-            [class.bg-base-200]="dateFilter() === 'overdue'"
+            [class.bg-base-content/10]="dateFilter() === 'overdue'"
             [class.font-medium]="dateFilter() === 'overdue'"
             (click)="
               filterChanged.emit({
@@ -144,7 +144,7 @@
         <li>
           <button
             class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
-            [class.bg-base-200]="dateFilter() === 'upcoming'"
+            [class.bg-base-content/10]="dateFilter() === 'upcoming'"
             [class.font-medium]="dateFilter() === 'upcoming'"
             (click)="
               filterChanged.emit({
@@ -175,7 +175,7 @@
         <li>
           <button
             class="w-full flex items-center justify-between px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
-            [class.bg-base-200]="filterType() === 'completed'"
+            [class.bg-base-content/10]="filterType() === 'completed'"
             [class.font-medium]="filterType() === 'completed'"
             (click)="
               filterChanged.emit({
@@ -230,7 +230,7 @@
           <div class="flex items-center gap-1">
             <button
               class="flex-1 flex items-center gap-3 px-2.5 py-2 rounded-md text-sm font-normal text-base-content hover:bg-base-200 transition-colors"
-              [class.bg-base-200]="projectFilter() === project.id"
+              [class.bg-base-content/10]="projectFilter() === project.id"
               [class.font-medium]="projectFilter() === project.id"
               (click)="
                 filterChanged.emit({
