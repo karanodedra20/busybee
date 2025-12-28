@@ -67,12 +67,12 @@ export class TaskCardComponent {
 
   getTagColor(index: number): string {
     const colors = [
-      'bg-purple-200 text-purple-700',
-      'bg-blue-200 text-blue-700',
-      'bg-green-200 text-green-700',
-      'bg-yellow-200 text-yellow-700',
-      'bg-orange-200 text-orange-700',
-      'bg-pink-200 text-pink-700',
+      'bg-primary/15 text-primary',
+      'bg-secondary/15 text-secondary',
+      'bg-accent/15 text-accent',
+      'bg-info/15 text-info',
+      'bg-success/15 text-success',
+      'bg-warning/15 text-warning',
     ];
     return colors[index % colors.length];
   }
@@ -101,7 +101,10 @@ export class TaskCardComponent {
     } else if (taskDate.toDateString() === tomorrow.toDateString()) {
       return 'Tomorrow';
     } else {
-      return taskDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return taskDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      });
     }
   }
 }

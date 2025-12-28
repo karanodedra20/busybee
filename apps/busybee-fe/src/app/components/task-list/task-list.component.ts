@@ -96,7 +96,7 @@ export class TaskListComponent implements OnInit {
 
       // Apply theme whenever it changes
       effect(() => {
-        const theme = this.isDarkMode() ? 'dark' : 'light';
+        const theme = this.isDarkMode() ? 'tropical-dark' : 'tropical';
         this.document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
       });

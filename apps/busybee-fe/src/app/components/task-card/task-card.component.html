@@ -1,4 +1,4 @@
-<li class="group bg-base-100 border border-base-content/20 rounded-lg mb-4 transition-all duration-200 hover:shadow-md hover:border-base-content/40 hover:-translate-y-0.5" style="box-shadow: 0 1px 2px 0 rgba(255, 255, 255, 0.08);">
+<li class="group bg-base-100 border border-base-content/20 rounded-lg mb-4 transition-all duration-200 hover:shadow-md hover:border-base-content/40 hover:-translate-y-0.5 shadow-sm">
   <div class="flex items-start gap-3 py-3 px-4 hover:bg-base-200/30 transition-colors cursor-pointer rounded-lg">
     <!-- Checkbox -->
     <button
@@ -61,12 +61,12 @@
             <!-- Priority Badge -->
             <span
               class="text-xs px-3 py-1.5 rounded-full font-normal"
-              [class.text-red-700]="task().priority === Priority.HIGH"
-              [class.bg-red-100]="task().priority === Priority.HIGH"
-              [class.text-yellow-700]="task().priority === Priority.MEDIUM"
-              [class.bg-yellow-100]="task().priority === Priority.MEDIUM"
-              [class.text-gray-600]="task().priority === Priority.LOW"
-              [class.bg-gray-100]="task().priority === Priority.LOW"
+              [class.text-error]="task().priority === Priority.HIGH"
+              [class.bg-error/15]="task().priority === Priority.HIGH"
+              [class.text-warning]="task().priority === Priority.MEDIUM"
+              [class.bg-warning/15]="task().priority === Priority.MEDIUM"
+              [class.text-info]="task().priority === Priority.LOW"
+              [class.bg-info/15]="task().priority === Priority.LOW"
             >
               {{ priorityLabel }}
             </span>
